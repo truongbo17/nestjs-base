@@ -12,10 +12,15 @@
     "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "strict": true, // Bật chế độ kiểm tra nghiêm ngặt
+    "noImplicitAny": true, // Cấm sử dụng kiểu `any` ngầm định
+    "strictNullChecks": true, // Bắt buộc xử lý null/undefined
+    "noImplicitReturns": true, // Yêu cầu khai báo kiểu trả về hàm
+    "noImplicitThis": true, // Kiểm tra kiểu `this`
+    "alwaysStrict": true, // Tự động thêm "use strict"
+    "strictPropertyInitialization": true, // Yêu cầu khởi tạo đầy đủ thuộc tính trong class
   }
 }
