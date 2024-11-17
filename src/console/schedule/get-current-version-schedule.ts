@@ -24,7 +24,6 @@ export class GetCurrentVersionSchedule {
   }
 
   getCurrentVersion(): void {
-    const { execSync } = require('child_process');
     execSync('npm run console:dev version', { stdio: 'inherit' });
   }
 }
