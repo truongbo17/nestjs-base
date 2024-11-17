@@ -5,9 +5,11 @@ import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { AllConfigType } from './config/config.type';
 import { UsersModule } from './modules/users/users.module';
 import * as path from 'node:path';
+import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [
+    // Modules system
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig],
@@ -36,6 +38,8 @@ import * as path from 'node:path';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    CommandModule,
+    // Modules append
     UsersModule,
   ],
   controllers: [],
