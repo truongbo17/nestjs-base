@@ -6,6 +6,7 @@ import { AllConfigType } from './config/config.type';
 import { UsersModule } from './modules/users/users.module';
 import * as path from 'node:path';
 import { CommandModule } from 'nestjs-command';
+import { AppCommandModule } from './console/command/app.command.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CommandModule } from 'nestjs-command';
       inject: [ConfigService],
     }),
     CommandModule,
+    AppCommandModule,
     // Modules append
     UsersModule,
   ],

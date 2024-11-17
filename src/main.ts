@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from './config/config.type';
 
 async function bootstrap() {
+  // Run HTTP server
   const app: INestApplication<any> = await NestFactory.create(AppModule, {
     cors: true,
   });
