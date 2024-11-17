@@ -3,7 +3,7 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 
 @Console()
-export class GetCurrentVersion {
+export class GetCurrentVersionCommand {
   private PACKAGE_NAME: string = '@nestjs/core';
   private PACKAGE_PATH: string = '../../../package.json';
 

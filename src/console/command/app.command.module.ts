@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { GetCurrentVersion } from './get-current-version';
+import { GetCurrentVersionCommand } from './get-current-version.command';
 import { ConsoleModule } from 'nestjs-console';
 
 @Module({
   imports: [ConsoleModule],
-  providers: [GetCurrentVersion],
+  providers: [GetCurrentVersionCommand],
 })
 export class AppCommandModule {}

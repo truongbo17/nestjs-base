@@ -5,17 +5,20 @@ import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { AllConfigType } from './config/config.type';
 import { UsersModule } from './modules/users/users.module';
 import * as path from 'node:path';
-import { CommandModule } from 'nestjs-command';
+import { CommandModule, CommandService } from 'nestjs-command';
 import { AppCommandModule } from './console/command/app.command.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { ScheduleModule as ScheduleModuleManage } from './console/schedule/schedule.module';
 
 @Module({
   imports: [
-    // Modules system
+    // Config
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig],
       envFilePath: ['.env'],
     }),
+    // I18N
     I18nModule.forRootAsync({
       useFactory: (configService: ConfigService<AllConfigType>) => ({
         fallbackLanguage: configService.getOrThrow('app.fallbackLanguage', {
@@ -39,12 +42,16 @@ import { AppCommandModule } from './console/command/app.command.module';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    // Command
     CommandModule,
     AppCommandModule,
+    // GetCurrentVersionSchedule
+    ScheduleModule.forRoot(),
+    ScheduleModuleManage,
     // Modules append
     UsersModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [CommandService],
 })
 export class AppModule {}
