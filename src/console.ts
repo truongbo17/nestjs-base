@@ -1,3 +1,4 @@
+// Document here: https://nest-commander.jaymcdoniel.dev
 import { BootstrapConsole } from 'nestjs-console';
 import { AppCommandModule } from './console/command/app.command.module';
 
