@@ -7,9 +7,9 @@ async function tran(
 ): Promise<Awaited<unknown>[]> {
   const i18n = I18nContext.current();
   if (i18n) {
-    return await Promise.all(
+    return Promise.all(
       wrapArray(keys).map(async (key) => {
-        i18n.t(key);
+        return i18n.t(key);
       }),
     );
   }

@@ -3,7 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { AllConfigType } from './config/config.type';
-import path from 'path';
+import { UsersModule } from './modules/users/users.module';
+import * as path from 'node:path';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import path from 'path';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    UsersModule,
   ],
   controllers: [],
   providers: [],
