@@ -1,19 +1,30 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
-import { CommandService } from 'nestjs-command';
+import { Cron, Timeout } from '@nestjs/schedule';
+import { execSync } from 'child_process';
 
 @Injectable()
 export class GetCurrentVersionSchedule {
-  private readonly logger = new Logger(GetCurrentVersionSchedule.name);
+  private readonly logger: Logger = new Logger(GetCurrentVersionSchedule.name);
 
-  constructor(private readonly commandService: CommandService) {}
+  constructor() {}
 
   @Cron('*/5 * * * * *', {
     name: 'GetCurrentVersionSchedule',
+    disabled: true,
   })
   handleGetCurrentVersion() {
-    this.commandService.exec(['version']);
+    this.getCurrentVersion();
+    this.logger.debug('Every run in 5 seconds');
+  }
 
-    this.logger.debug('Called when the current second is 3');
+  @Timeout(3000)
+  runGetCurrentVersion() {
+    this.getCurrentVersion();
+    this.logger.debug('Start after 3 seconds');
+  }
+
+  getCurrentVersion(): void {
+    const { execSync } = require('child_process');
+    execSync('npm run console:dev version', { stdio: 'inherit' });
   }
 }

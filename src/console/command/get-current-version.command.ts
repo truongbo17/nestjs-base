@@ -17,7 +17,7 @@ export class GetCurrentVersionCommand {
     );
 
     console.log(
-      `\u001b[37;42m NestJS version: ${packageJson.dependencies[this.PACKAGE_NAME]}`,
+      `NestJS current version: ${packageJson.dependencies[this.PACKAGE_NAME]}`,
     );
   }
 }
