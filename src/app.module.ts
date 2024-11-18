@@ -10,13 +10,15 @@ import { AppCommandModule } from './console/command/app.command.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as ScheduleModuleManage } from './console/schedule/schedule.module';
 import { BullModule } from '@nestjs/bullmq';
+import queueConfig from './config/queue.config';
+import viewConfig from './config/view.config';
 
 @Module({
   imports: [
     // Config
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig],
+      load: [appConfig, queueConfig, viewConfig],
       envFilePath: ['.env'],
     }),
     // I18N
