@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
@@ -12,6 +12,8 @@ import { ScheduleModule as ScheduleModuleManage } from './console/schedule/sched
 import { BullModule } from '@nestjs/bullmq';
 import queueConfig from './config/queue.config';
 import viewConfig from './config/view.config';
+import { WinstonModule } from 'nest-winston';
+import * as winston from 'winston';
 
 @Module({
   imports: [
@@ -58,10 +60,31 @@ import viewConfig from './config/view.config';
         port: 6379,
       },
     }),
+    // Log
+    WinstonModule.forRoot({
+      transports: [
+        new winston.transports.Console({
+          format: winston.format.combine(
+            winston.format.timestamp(),
+            winston.format.colorize(),
+            winston.format.printf(({ timestamp, level, message }): string => {
+              return `${timestamp} [${level}] ${message}`;
+            }),
+          ),
+        }),
+        new winston.transports.File({
+          dirname: './logs',
+          filename: 'application-%DATE%.log',
+          zippedArchive: true,
+          maxsize: 20,
+          maxFiles: 14,
+        }),
+      ],
+    }),
     // Modules append
     UsersModule,
   ],
   controllers: [],
-  providers: [CommandService],
+  providers: [CommandService, Logger],
 })
 export class AppModule {}

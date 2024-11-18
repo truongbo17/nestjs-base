@@ -1,6 +1,7 @@
 import { ClassConstructor } from 'class-transformer/types/interfaces';
 import { plainToClass } from 'class-transformer';
 import { validateSync } from 'class-validator';
+import { ValidationError } from '@nestjs/common';
 
 function validateConfig<T extends object>(
   config: Record<string, unknown>,
@@ -10,7 +11,7 @@ function validateConfig<T extends object>(
     enableImplicitConversion: true,
   });
 
-  const errors = validateSync(validateConfig, {
+  const errors: ValidationError[] = validateSync(validateConfig, {
     skipMissingProperties: false,
   });
 

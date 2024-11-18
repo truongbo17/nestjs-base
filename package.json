@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@nestjs/bullmq": "^10.2.2",
+    "@nestjs/cache-manager": "^2.3.0",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.3.0",
     "@nestjs/core": "^10.0.0",
@@ -31,16 +32,20 @@
     "@nestjs/schedule": "^4.1.1",
     "@nestjs/swagger": "^8.0.7",
     "bullmq": "^5.26.2",
+    "cache-manager": "^5.7.6",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "hbs": "^4.2.0",
     "nest-commander": "^3.15.0",
+    "nest-winston": "^1.9.7",
     "nestjs-command": "^3.1.4",
     "nestjs-console": "^9.0.0",
     "nestjs-i18n": "^10.5.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.17.0",
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
