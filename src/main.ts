@@ -1,19 +1,39 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from './config/config.type';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import { join } from 'node:path';
 
 async function bootstrap() {
   // Run HTTP server
-  const app: INestApplication<any> = await NestFactory.create(AppModule, {
-    cors: true,
-  });
+  const app: NestExpressApplication =
+    await NestFactory.create<NestExpressApplication>(AppModule, {
+      cors: true,
+    });
 
+  // Get config
   const configService: ConfigService<AllConfigType> = app.get(
     ConfigService<AllConfigType>,
   );
+
+  // Views
+  app.useStaticAssets(
+    join(
+      __dirname,
+      '..',
+      configService.getOrThrow('view.pathPublic', { infer: true }),
+    ),
+  );
+  app.useStaticAssets(
+    join(
+      __dirname,
+      '..',
+      configService.getOrThrow('view.pathView', { infer: true }),
+    ),
+  );
+  app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
 
   // Swagger
   const options = new DocumentBuilder()
