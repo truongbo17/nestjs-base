@@ -1,6 +1,7 @@
 import { Command, Console } from 'nestjs-console';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
+import helpers from '../../utils/helpers';
 
 @Console()
 export class GetCurrentVersionCommand {
@@ -16,8 +17,10 @@ export class GetCurrentVersionCommand {
       fs.readFileSync(path.join(__dirname, this.PACKAGE_PATH), 'utf8'),
     );
 
-    console.log(
+    helpers.log(
+      'log',
       `NestJS current version: ${packageJson.dependencies[this.PACKAGE_NAME]}`,
+      GetCurrentVersionCommand.name,
     );
   }
 }

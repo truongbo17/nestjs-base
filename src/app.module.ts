@@ -17,6 +17,7 @@ import * as winston from 'winston';
 import { format, transports } from 'winston';
 import 'winston-daily-rotate-file';
 import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware';
+import { RouterModule } from './routers/router.module';
 
 @Module({
   imports: [
@@ -63,7 +64,7 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
         port: 6379,
       },
     }),
-    // Log
+    // Logger
     WinstonModule.forRoot({
       transports: [
         new winston.transports.Console({
@@ -73,7 +74,7 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
             }),
             winston.format.colorize({ all: true }),
             winston.format.printf(({ timestamp, level, message, context }) => {
-              return `${timestamp} \x1b[36m[${context || 'Application'}]\x1b[0m ${level}: ${message}`;
+              return `${timestamp} \x1b[36m[${context || 'HttpApplication'} - Http]\x1b[0m ${level}: ${message}`;
             }),
           ),
         }),
@@ -92,6 +93,8 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
         }),
       ],
     }),
+    // Router
+    RouterModule,
     // Modules append
     UsersModule,
   ],
