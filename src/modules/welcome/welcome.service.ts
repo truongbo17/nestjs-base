@@ -1,11 +1,13 @@
-import { Injectable, Render } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class WelcomeService {
-  @Render('welcome.hbs')
+  constructor(private readonly configService: ConfigService) {}
+
   async welcome() {
     return {
-      title: 'Base',
+      appName: this.configService.getOrThrow('app.name', { infer: true }),
     };
   }
 }
