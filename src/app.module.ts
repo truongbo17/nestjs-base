@@ -68,17 +68,24 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
       transports: [
         new winston.transports.Console({
           format: winston.format.combine(
-            winston.format.timestamp(),
-            winston.format.colorize(),
-            winston.format.printf(({ timestamp, level, message }): string => {
-              return `${timestamp} [${level}] ${message}`;
+            winston.format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss',
+            }),
+            winston.format.colorize({ all: true }),
+            winston.format.printf(({ timestamp, level, message, context }) => {
+              return `${timestamp} \x1b[36m[${context || 'Application'}]\x1b[0m ${level}: ${message}`;
             }),
           ),
         }),
         // same for all levels
         new transports.DailyRotateFile({
           filename: `logs/%DATE%.log`,
-          format: format.combine(format.timestamp(), format.json()),
+          format: format.combine(
+            winston.format.timestamp({
+              format: 'YYYY-MM-DD HH:mm:ss',
+            }),
+            format.json(),
+          ),
           datePattern: 'YYYY-MM-DD',
           zippedArchive: false,
           maxFiles: '30d',

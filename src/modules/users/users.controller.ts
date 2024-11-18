@@ -1,4 +1,4 @@
-import { Controller, Get, Inject } from '@nestjs/common';
+import { Controller, Get, HttpException, Inject, Logger } from '@nestjs/common';
 import tran from '../../utils/language';
 import {
   ApiBearerAuth,
@@ -7,8 +7,6 @@ import {
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
 
 @ApiBearerAuth()
 @ApiTags('Users')
@@ -18,14 +16,18 @@ import { Logger } from 'winston';
 })
 @Controller('users')
 export class UsersController {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-  ) {}
+  // constructor(
+  //   @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+  // ) {}
 
-  // private readonly logger = new Logger(UsersController.name);
+  private readonly logger = new Logger(UsersController.name);
   @Get()
   async index() {
-    this.logger.error('a');
+    try {
+      throw new HttpException('a', 404);
+    } catch (e) {
+      this.logger.error(e);
+    }
 
     const name = await tran(['user.name']);
     console.log(1, name);
