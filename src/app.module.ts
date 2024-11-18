@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
@@ -14,6 +14,9 @@ import queueConfig from './config/queue.config';
 import viewConfig from './config/view.config';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
+import { format, transports } from 'winston';
+import 'winston-daily-rotate-file';
+import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware';
 
 @Module({
   imports: [
@@ -72,12 +75,13 @@ import * as winston from 'winston';
             }),
           ),
         }),
-        new winston.transports.File({
-          dirname: './logs',
-          filename: 'application-%DATE%.log',
-          zippedArchive: true,
-          maxsize: 20,
-          maxFiles: 14,
+        // same for all levels
+        new transports.DailyRotateFile({
+          filename: `logs/%DATE%.log`,
+          format: format.combine(format.timestamp(), format.json()),
+          datePattern: 'YYYY-MM-DD',
+          zippedArchive: false,
+          maxFiles: '30d',
         }),
       ],
     }),
@@ -87,4 +91,8 @@ import * as winston from 'winston';
   controllers: [],
   providers: [CommandService, Logger],
 })
-export class AppModule {}
+export class AppModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+  }
+}

@@ -5,6 +5,7 @@ import { AllConfigType } from './config/config.type';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'node:path';
+import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 async function bootstrap() {
   // Run HTTP server
@@ -34,6 +35,9 @@ async function bootstrap() {
     ),
   );
   app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
+
+  // Logger
+  app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   // Swagger
   const options = new DocumentBuilder()
