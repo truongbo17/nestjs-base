@@ -14,6 +14,7 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
 import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
+import { DatabaseModule } from './core/database/database.module';
 
 @Module({
   imports: [
@@ -23,6 +24,8 @@ import databaseConfig from './config/database.config';
       load: [appConfig, queueConfig, viewConfig, databaseConfig],
       envFilePath: ['.env'],
     }),
+    // Database
+    DatabaseModule.forRootAsync(),
     // I18N
     I18nModule.forRootAsync({
       useFactory: (configService: ConfigService<AllConfigType>) => ({
