@@ -8,22 +8,22 @@ const helpers = {
     const logger: Logger = new Logger(context);
     switch (level) {
       case 'log':
-        logger.log(message);
+        logger.log(message, context);
         break;
       case 'error':
-        logger.error(message);
+        logger.error(message, context);
         break;
       case 'warn':
-        logger.warn(message);
+        logger.warn(message, context);
         break;
       case 'debug':
-        logger.debug(message);
+        logger.debug(message, context);
         break;
       case 'verbose':
-        logger.verbose(message);
+        logger.verbose(message, context);
         break;
       default:
-        logger.log(`Unknown log level: ${level}. Message: ${message}`);
+        logger.log(`Unknown log level: ${level}. Message: ${message}`, context);
         break;
     }
   },

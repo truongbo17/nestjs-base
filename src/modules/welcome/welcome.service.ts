@@ -1,3 +1,11 @@
+import { Injectable, Render } from '@nestjs/common';
+
+@Injectable()
 export class WelcomeService {
-  async welcome() {}
+  @Render('welcome.hbs')
+  async welcome() {
+    return {
+      title: 'Base',
+    };
+  }
 }
