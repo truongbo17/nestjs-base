@@ -1,5 +1,6 @@
 import { Controller, Get, HttpException, Inject, Logger } from '@nestjs/common';
 import tran from '../../utils/language';
+import helpers from '../../utils/helpers';
 import {
   ApiBearerAuth,
   ApiCreatedResponse,
@@ -26,7 +27,7 @@ export class UsersController {
     try {
       throw new HttpException('a', 404);
     } catch (e) {
-      this.logger.error(e);
+      helpers.log('error', e, UsersController.name);
     }
 
     const name = await tran(['user.name']);

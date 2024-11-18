@@ -52,3 +52,4 @@ $ npm run test:cov
 * Queue
 * Swagger
 * View (hbs engine)
+* Logger

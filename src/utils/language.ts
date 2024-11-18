@@ -1,5 +1,5 @@
 import { I18nContext } from 'nestjs-i18n';
-import wrapArray from './helpers';
+import helpers from './helpers';
 
 async function tran(
   keys: string | string[],
@@ -8,7 +8,7 @@ async function tran(
   const i18n = I18nContext.current();
   if (i18n) {
     return Promise.all(
-      wrapArray(keys).map(async (key) => {
+      helpers.wrapArray(keys).map(async (key) => {
         return i18n.t(key);
       }),
     );
