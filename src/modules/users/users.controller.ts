@@ -8,7 +8,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-// @ApiBearerAuth()
+@ApiBearerAuth()
 @ApiTags('Users')
 @Controller({
   path: 'users',
