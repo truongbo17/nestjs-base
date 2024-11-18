@@ -9,6 +9,7 @@ import { CommandModule, CommandService } from 'nestjs-command';
 import { AppCommandModule } from './console/command/app.command.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as ScheduleModuleManage } from './console/schedule/schedule.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -48,6 +49,13 @@ import { ScheduleModule as ScheduleModuleManage } from './console/schedule/sched
     // GetCurrentVersionSchedule
     ScheduleModule.forRoot(),
     ScheduleModuleManage,
+    // Queue
+    BullModule.forRoot({
+      connection: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
     // Modules append
     UsersModule,
   ],
