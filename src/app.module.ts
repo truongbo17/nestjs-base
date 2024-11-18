@@ -3,7 +3,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { AllConfigType } from './config/config.type';
-import { UsersModule } from './modules/users/users.module';
 import * as path from 'node:path';
 import { CommandService } from 'nestjs-command';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -14,13 +13,14 @@ import viewConfig from './config/view.config';
 import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware';
 import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
+import databaseConfig from './config/database.config';
 
 @Module({
   imports: [
     // Config
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, queueConfig, viewConfig],
+      load: [appConfig, queueConfig, viewConfig, databaseConfig],
       envFilePath: ['.env'],
     }),
     // I18N
@@ -47,6 +47,7 @@ import { LoggerModule } from './core/logger/logger.module';
       imports: [ConfigModule],
       inject: [ConfigService],
     }),
+    // Schedule
     ScheduleModule.forRoot(),
     ScheduleModuleManage,
     // Queue
@@ -60,8 +61,7 @@ import { LoggerModule } from './core/logger/logger.module';
     LoggerModule.forRoot(true),
     // Router
     RouterModule,
-    // Modules append
-    UsersModule,
+    // Modules append...
   ],
   controllers: [],
   providers: [CommandService, Logger],
