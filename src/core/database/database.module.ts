@@ -10,18 +10,20 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 @Module({})
 export class DatabaseModule {
   static forRootAsync(): DynamicModule {
-    const isDocumentDatabase: DatabaseConfig =
-      databaseConfig() as DatabaseConfig;
-    const databaseModule: DynamicModule = isDocumentDatabase
+    const config: DatabaseConfig = databaseConfig() as DatabaseConfig;
+    const databaseModule: DynamicModule = config.isDocumentDatabase
       ? MongooseModule.forRootAsync({
           useClass: MongooseConfigService,
         })
       : TypeOrmModule.forRootAsync({
           useClass: TypeOrmConfigService,
           dataSourceFactory: async (
-            options: DataSourceOptions,
+            options: DataSourceOptions | undefined,
           ): Promise<DataSource> => {
-            return new DataSource(options).initialize();
+            if (!options) {
+              throw new Error('No Datasource options provided');
+            }
+            return await new DataSource(options).initialize();
           },
         });
 
