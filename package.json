@@ -40,6 +40,7 @@
     "hbs": "^4.2.0",
     "mongoose": "^8.8.1",
     "mongoose-autopopulate": "^1.1.0",
+    "mysql2": "^3.11.4",
     "nest-commander": "^3.15.0",
     "nest-winston": "^1.9.7",
     "nestjs-command": "^3.1.4",
@@ -48,11 +49,11 @@
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
+    "source-map-support": "^0.5.21",
     "swagger-ui-express": "^5.0.1",
     "typeorm": "^0.3.20",
     "winston": "^3.17.0",
-    "winston-daily-rotate-file": "^5.0.0",
-    "source-map-support": "^0.5.21"
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

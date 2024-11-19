@@ -18,6 +18,8 @@ import { DatabaseModule } from './core/database/database.module';
 
 @Module({
   imports: [
+    // Logger
+    LoggerModule.forRoot(true),
     // Config
     ConfigModule.forRoot({
       isGlobal: true,
@@ -60,8 +62,6 @@ import { DatabaseModule } from './core/database/database.module';
         port: 6379,
       },
     }),
-    // Logger
-    LoggerModule.forRoot(true),
     // Router
     RouterModule,
     // Modules append...
