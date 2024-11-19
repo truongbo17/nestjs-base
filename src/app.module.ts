@@ -15,6 +15,7 @@ import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
 import { DatabaseModule } from './core/database/database.module';
+import fileConfig from './config/file.config';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { DatabaseModule } from './core/database/database.module';
     // Config
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, queueConfig, viewConfig, databaseConfig],
+      load: [appConfig, queueConfig, viewConfig, databaseConfig, fileConfig],
       envFilePath: ['.env'],
     }),
     // Database
