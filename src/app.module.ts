@@ -14,8 +14,12 @@ import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware
 import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
-import { DatabaseModule } from './core/database/database.module';
 import fileConfig from './config/file.config';
+import { MongooseModule } from '@nestjs/mongoose';
+import { MongooseConfigService } from './core/database/mongoose-config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmConfigService } from './core/database/typeorm-config.service';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 @Module({
   imports: [
@@ -27,8 +31,24 @@ import fileConfig from './config/file.config';
       load: [appConfig, queueConfig, viewConfig, databaseConfig, fileConfig],
       envFilePath: ['.env'],
     }),
-    // Database
-    DatabaseModule.forRootAsync(),
+    // Database MongoDB
+    // MongooseModule.forRootAsync({
+    //   connectionName: 'MONGOOSE_CONNECT',
+    //   useClass: MongooseConfigService,
+    // }),
+    // Database ORM
+    TypeOrmModule.forRootAsync({
+      name: 'ORM_CONNECT',
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (
+        options: DataSourceOptions | undefined,
+      ): Promise<DataSource> => {
+        if (!options) {
+          throw new Error('No Datasource options provided');
+        }
+        return await new DataSource(options).initialize();
+      },
+    }),
     // I18N
     I18nModule.forRootAsync({
       useFactory: (configService: ConfigService<AllConfigType>) => ({
