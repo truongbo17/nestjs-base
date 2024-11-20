@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, Timeout } from '@nestjs/schedule';
 import { execSync } from 'child_process';
-import helpers from '../../utils/helpers';
+import { LoggerService } from '../../core/logger/services/logger.service';
 
 @Injectable()
 export class GetCurrentVersionSchedule {
+  constructor(private readonly loggerService: LoggerService) {}
+
   @Cron('*/5 * * * * *', {
     name: 'GetCurrentVersionSchedule',
     disabled: true,
@@ -17,7 +19,11 @@ export class GetCurrentVersionSchedule {
   runGetCurrentVersion() {
     this.getCurrentVersion();
 
-    helpers.log('log', 'Start after 3 seconds', GetCurrentVersionSchedule.name);
+    this.loggerService.log(
+      'log',
+      'Start after 3 seconds',
+      GetCurrentVersionSchedule.name,
+    );
   }
 
   getCurrentVersion(): void {

@@ -1,9 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { WinstonModule } from 'nest-winston';
 import * as winston from 'winston';
 import { format, transports } from 'winston';
 import 'winston-daily-rotate-file';
+import { LoggerService } from './services/logger.service';
 
+@Global()
 @Module({})
 export class LoggerModule {
   static forRoot(isHttp: boolean = true) {
@@ -41,6 +43,8 @@ export class LoggerModule {
           ],
         }),
       ],
+      providers: [LoggerService],
+      exports: [LoggerService],
     };
   }
 }
