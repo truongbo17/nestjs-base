@@ -1,9 +1,6 @@
 import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
-import { HeaderResolver, I18nModule } from 'nestjs-i18n';
-import { AllConfigType } from './config/config.type';
-import * as path from 'node:path';
 import { CommandService } from 'nestjs-command';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ScheduleModule as ScheduleModuleManage } from './console/schedule/schedule.module';
@@ -15,11 +12,10 @@ import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
 import fileConfig from './config/file.config';
-import { MongooseModule } from '@nestjs/mongoose';
-import { MongooseConfigService } from './core/database/mongoose-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './core/database/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { I18nLangModule } from './core/i18n/i18n-lang.module';
 
 @Module({
   imports: [
@@ -50,29 +46,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
       },
     }),
     // I18N
-    I18nModule.forRootAsync({
-      useFactory: (configService: ConfigService<AllConfigType>) => ({
-        fallbackLanguage: configService.getOrThrow('app.fallbackLanguage', {
-          infer: true,
-        }),
-        loaderOptions: { path: path.join(__dirname, '/lang/'), watch: true },
-      }),
-      resolvers: [
-        {
-          use: HeaderResolver,
-          useFactory: (
-            configService: ConfigService<AllConfigType>,
-          ): [string] => {
-            return [
-              configService.getOrThrow('app.headerLanguage', { infer: true }),
-            ];
-          },
-          inject: [ConfigService],
-        },
-      ],
-      imports: [ConfigModule],
-      inject: [ConfigService],
-    }),
+    I18nLangModule.forRootAsync(),
     // Schedule
     ScheduleModule.forRoot(),
     ScheduleModuleManage,
