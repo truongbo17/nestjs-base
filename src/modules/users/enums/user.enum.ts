@@ -1,0 +1,10 @@
+export enum ENUM_USER_GENDER {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+}
+
+export enum ENUM_USER_STATUS {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  BLOCKED = 'BLOCKED',
+}

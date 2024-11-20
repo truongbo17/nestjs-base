@@ -1,4 +1,8 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
+import {
+  ENUM_USER_GENDER,
+  ENUM_USER_STATUS,
+} from '../../modules/users/enums/user.enum';
 
 export class CreateTableUsers1732011345467 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
@@ -45,6 +49,12 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
             isNullable: true,
           },
           {
+            name: 'gender',
+            type: 'enum',
+            enum: Object.values(ENUM_USER_GENDER),
+            isNullable: true,
+          },
+          {
             name: 'created_at',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
@@ -74,7 +84,8 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
           },
           {
             name: 'status',
-            type: 'int',
+            type: 'enum',
+            enum: Object.values(ENUM_USER_STATUS),
             isNullable: true,
           },
         ],

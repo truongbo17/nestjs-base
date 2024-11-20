@@ -5,12 +5,16 @@ import { UsersModule } from '../modules/users/users.module';
 
 @Module({
   imports: [
-    UsersModule,
     WelcomeModule,
+    UsersModule,
     NestJsRouterModule.register([
       {
         path: '/',
         module: WelcomeModule,
+      },
+      {
+        path: '/user',
+        module: UsersModule,
       },
     ]),
   ],

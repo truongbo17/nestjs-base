@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { UsersController } from './users.controller';
+import { UserController } from './controllers/user.controller';
 
 @Module({
-  controllers: [UsersController],
+  controllers: [UserController],
 })
-export class UsersModule {}
+export class UsersModule {
+  async create() {}
+}

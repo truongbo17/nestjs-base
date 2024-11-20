@@ -1,7 +1,7 @@
 import { Controller, Get, Render } from '@nestjs/common';
 import { WelcomeService } from './welcome.service';
 
-@Controller('')
+@Controller()
 export class WelcomeController {
   constructor(private readonly welcomeService: WelcomeService) {}
 
