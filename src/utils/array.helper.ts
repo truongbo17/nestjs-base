@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const arrayHelpers = {
+const arrayHelper = {
   wrapArray(value: any | any[]): any[] {
     return Array.isArray(value) ? value : [value];
   },
@@ -58,4 +58,4 @@ const arrayHelpers = {
   },
 };
 
-export default arrayHelpers;
+export default arrayHelper;

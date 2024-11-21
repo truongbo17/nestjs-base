@@ -15,10 +15,29 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "noImplicitAny": true, // Cấm sử dụng kiểu `any` ngầm định
-    "strictNullChecks": true, // Bắt buộc xử lý null/undefined
-    "noImplicitReturns": true, // Yêu cầu khai báo kiểu trả về hàm
-    "noImplicitThis": true, // Kiểm tra kiểu `this`
-    "alwaysStrict": true, // Tự động thêm "use strict"
-  }
+    "noImplicitAny": true,
+    // Cấm sử dụng kiểu `any` ngầm định
+    "strictNullChecks": true,
+    // Bắt buộc xử lý null/undefined
+    "noImplicitReturns": true,
+    // Yêu cầu khai báo kiểu trả về hàm
+    "noImplicitThis": true,
+    // Kiểm tra kiểu `this`
+    "alwaysStrict": true,
+    // Tự động thêm "use strict"
+    "resolveJsonModule": true
+  },
+  "include": [
+    "src",
+    "test"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "coverage",
+    "logs",
+    "data",
+    "public",
+    "storage"
+  ]
 }

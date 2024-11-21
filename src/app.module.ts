@@ -1,4 +1,4 @@
-import { Logger, MiddlewareConsumer, Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import appConfig from './config/app.config';
 import { CommandService } from 'nestjs-command';
@@ -7,7 +7,6 @@ import { ScheduleModule as ScheduleModuleManage } from './console/schedule/sched
 import { BullModule } from '@nestjs/bullmq';
 import queueConfig from './config/queue.config';
 import viewConfig from './config/view.config';
-import { RequestLoggerMiddleware } from './core/app/middlewares/request-logger.middleware';
 import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
@@ -16,6 +15,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigService } from './core/database/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { I18nLangModule } from './core/i18n/i18n-lang.module';
+import { AppMiddlewareModule } from './core/app/app.middleware.module';
 
 @Module({
   imports: [
@@ -57,6 +57,8 @@ import { I18nLangModule } from './core/i18n/i18n-lang.module';
         port: 6379,
       },
     }),
+    //Middleware
+    AppMiddlewareModule,
     // Router
     RouterModule,
     // Modules append...
@@ -64,8 +66,4 @@ import { I18nLangModule } from './core/i18n/i18n-lang.module';
   controllers: [],
   providers: [CommandService, Logger],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
-  }
-}
+export class AppModule {}

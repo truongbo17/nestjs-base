@@ -7,8 +7,14 @@ export type AppConfig = {
   appUrl?: string;
   port: number;
   apiPrefix: string;
-  appLanguage: string;
+  appLanguage: ENUM_MESSAGE_LANGUAGE;
   availableLanguage: ENUM_MESSAGE_LANGUAGE[];
-  headerLanguage: string;
+  headerLanguage?: string;
   timezone: string;
+  urlVersion: {
+    enable?: boolean;
+    prefix?: string;
+    version?: number;
+  };
+  repoVersion: string;
 };
