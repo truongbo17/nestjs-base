@@ -7,7 +7,7 @@ import { ScheduleModule as ScheduleModuleManage } from './console/schedule/sched
 import { BullModule } from '@nestjs/bullmq';
 import queueConfig from './config/queue.config';
 import viewConfig from './config/view.config';
-import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware';
+import { RequestLoggerMiddleware } from './core/app/middlewares/request-logger.middleware';
 import { RouterModule } from './routers/router.module';
 import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
@@ -37,7 +37,7 @@ import { I18nLangModule } from './core/i18n/i18n-lang.module';
       name: 'ORM_CONNECT',
       useClass: TypeOrmConfigService,
       dataSourceFactory: async (
-        options: DataSourceOptions | undefined,
+        options: DataSourceOptions | undefined
       ): Promise<DataSource> => {
         if (!options) {
           throw new Error('No Datasource options provided');

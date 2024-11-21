@@ -9,7 +9,7 @@ import { AppCommandModule } from './console/command/app.command.module';
 import { INestApplicationContext } from '@nestjs/common';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
-const bootstrap = new BootstrapConsole({
+const bootstrap: BootstrapConsole = new BootstrapConsole({
   module: AppCommandModule,
   useDecorators: true,
 });

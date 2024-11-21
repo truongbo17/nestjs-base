@@ -6,6 +6,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'node:path';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
+import * as process from 'node:process';
+import { Environment } from './config/app.config';
 
 async function bootstrap() {
   // Run HTTP server
@@ -16,39 +18,47 @@ async function bootstrap() {
 
   // Get config
   const configService: ConfigService<AllConfigType> = app.get(
-    ConfigService<AllConfigType>,
+    ConfigService<AllConfigType>
   );
+
+  process.env.NODE_ENV = configService.getOrThrow('app.appEnv', {
+    infer: true,
+  });
+
+  process.env.TZ = configService.getOrThrow('app.timezone', { infer: true });
 
   // Views
   app.useStaticAssets(
     join(
       __dirname,
       '..',
-      configService.getOrThrow('view.pathPublic', { infer: true }),
-    ),
+      configService.getOrThrow('view.pathPublic', { infer: true })
+    )
   );
   app.useStaticAssets(
     join(
       __dirname,
       '..',
-      configService.getOrThrow('view.pathView', { infer: true }),
-    ),
+      configService.getOrThrow('view.pathView', { infer: true })
+    )
   );
   app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
 
   // Logger
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
-  // Swagger
-  const options = new DocumentBuilder()
-    .setTitle('API')
-    .setDescription('API docs')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
+  if (process.env.NODE_ENV !== Environment.PRODUCTION) {
+    // Swagger
+    const options = new DocumentBuilder()
+      .setTitle('API')
+      .setDescription('API docs')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
 
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('docs', app, document);
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup('docs', app, document);
+  }
 
   await app.listen(configService.getOrThrow('app.port', { infer: true }));
 }

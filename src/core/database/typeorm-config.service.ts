@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { AllConfigType } from '../../config/config.type';
+import { Environment } from '../../config/app.config';
 
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
@@ -11,7 +12,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     let extras: object = {};
     if (
       ['postgres'].includes(
-        <string>this.configService.get('database.type', { infer: true }),
+        <string>this.configService.get('database.type', { infer: true })
       )
     ) {
       // max connection pool size
@@ -39,7 +40,8 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       dropSchema: false,
       keepConnectionAlive: true,
       logging:
-        this.configService.get('app.nodeEnv', { infer: true }) !== 'production',
+        this.configService.get('app.appEnv', { infer: true }) !==
+        Environment.PRODUCTION,
       entities: [__dirname + '/../**/*.entity{.ts,.js}'],
       migrations: [__dirname + '../database/migrations/**/*{.ts,.js}'],
       cli: {
@@ -54,7 +56,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             ? {
                 rejectUnauthorized: this.configService.get(
                   'database.rejectUnauthorized',
-                  { infer: true },
+                  { infer: true }
                 ),
                 ca:
                   this.configService.get('database.ca', { infer: true }) ??
