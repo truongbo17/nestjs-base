@@ -21,7 +21,7 @@ export class AppCustomLanguageMiddleware implements NestMiddleware {
     next: NextFunction
   ): Promise<void> {
     let customLang: string = this.configService.getOrThrow<string>(
-      'message.language',
+      'app.appLanguage',
       { infer: true }
     );
 
