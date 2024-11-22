@@ -5,6 +5,13 @@ const arrayHelper = {
     return Array.isArray(value) ? value : [value];
   },
 
+  parseStringToArray(value: string | string[]): string[] {
+    if (Array.isArray(value)) {
+      return value;
+    }
+    return value.split(',').map(item => item.trim());
+  },
+
   getByIndexFromLeft<T>(array: T[], index: number): T[] {
     return _.take(array, index + 1);
   },

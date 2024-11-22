@@ -7,10 +7,7 @@ import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { MiddlewareConfigType } from './middleware.config.type';
 
 class EnvironmentVariablesValidator {
-  @IsString()
-  @IsNotEmpty()
-  @MinLength(1)
-  APP_ALLOW_CORS_ORIGIN: string;
+  @IsString() @IsNotEmpty() @MinLength(1) APP_ALLOW_CORS_ORIGIN: string;
 }
 
 export default registerAs<MiddlewareConfigType>('middleware', () => {
@@ -34,7 +31,8 @@ export default registerAs<MiddlewareConfigType>('middleware', () => {
     timeout: ms('30s'), // 30s based on ms module
     cors: {
       allowMethod: ['GET', 'DELETE', 'PUT', 'PATCH', 'POST', 'HEAD'],
-      allowOrigin: process.env.APP_ALLOW_CORS_ORIGIN?.split(',') ?? [],
+      allowOrigin:
+        <string[]>process.env.APP_ALLOW_CORS_ORIGIN?.split(',') ?? [],
       allowHeader: [
         'Accept',
         'Accept-Language',

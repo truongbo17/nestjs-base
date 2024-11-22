@@ -10,6 +10,7 @@ import {
   AppTextBodyParserMiddleware,
   AppUrlencodedBodyParserMiddleware,
 } from './middlewares/app.body-parser.middleware';
+import { AppCorsMiddleware } from './middlewares/app.cors.middleware';
 
 @Module({
   controllers: [],
@@ -37,7 +38,8 @@ export class AppMiddlewareModule implements NestModule {
         AppJsonBodyParserMiddleware,
         AppTextBodyParserMiddleware,
         AppRawBodyParserMiddleware,
-        AppUrlencodedBodyParserMiddleware
+        AppUrlencodedBodyParserMiddleware,
+        AppCorsMiddleware
       )
       .forRoutes('*');
   }

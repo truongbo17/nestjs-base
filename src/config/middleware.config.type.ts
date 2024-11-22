@@ -16,7 +16,7 @@ export type MiddlewareConfigType = {
   timeout: number;
   cors: {
     allowMethod: string[];
-    allowOrigin: string[];
+    allowOrigin: string | boolean | string[];
     allowHeader: string[];
   };
   throttle: {
