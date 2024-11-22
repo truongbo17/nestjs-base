@@ -9,8 +9,13 @@ import { UsersModule } from '../modules/users/users.module';
     UsersModule,
     NestJsRouterModule.register([
       {
-        path: '/',
-        module: WelcomeModule,
+        path: '/view',
+        children: [
+          {
+            path: '/welcome',
+            module: WelcomeModule,
+          },
+        ],
       },
       {
         path: '/user',

@@ -39,7 +39,7 @@ async function bootstrap() {
   // Global prefix
   const globalPrefix = configService.get('app.apiPrefix', { infer: true });
   if (globalPrefix) {
-    app.setGlobalPrefix(globalPrefix);
+    app.setGlobalPrefix(globalPrefix, { exclude: ['view/(.*)'] });
   }
 
   // For Custom Validation
