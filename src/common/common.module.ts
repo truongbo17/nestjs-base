@@ -15,6 +15,7 @@ import { CommandService } from 'nestjs-command';
 import redisConfig from '../config/redis.config';
 import { CacheModule, CacheOptions, CacheStore } from '@nestjs/cache-manager';
 import { RedisStore, redisStore } from 'cache-manager-redis-store';
+import mailConfig from '../config/mail.config';
 
 @Module({
   controllers: [],
@@ -33,6 +34,7 @@ import { RedisStore, redisStore } from 'cache-manager-redis-store';
         fileConfig,
         middlewareConfig,
         redisConfig,
+        mailConfig,
       ],
       envFilePath: ['.env'],
     }),

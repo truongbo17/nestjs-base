@@ -5,6 +5,7 @@ import { DatabaseConfig } from './database.config.type';
 import { FileConfig } from './file-config.type';
 import { MiddlewareConfigType } from './middleware.config.type';
 import { RedisConfigType } from './redis.config.type';
+import { MailConfigType } from './mail-config.type';
 
 export type AllConfigType = {
   app: AppConfig;
@@ -14,4 +15,5 @@ export type AllConfigType = {
   file: FileConfig;
   middleWare: MiddlewareConfigType;
   redis: RedisConfigType;
+  mail: MailConfigType;
 };

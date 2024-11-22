@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
+    "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/bullmq": "^10.2.2",
     "@nestjs/cache-manager": "^2.3.0",
     "@nestjs/common": "^10.0.0",
@@ -58,6 +59,7 @@
     "nestjs-command": "^3.1.4",
     "nestjs-console": "^9.0.0",
     "nestjs-i18n": "^10.5.0",
+    "nodemailer": "^6.9.16",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.0",
     "response-time": "^2.3.3",
@@ -80,6 +82,7 @@
     "@types/lodash": "^4.17.13",
     "@types/ms": "^0.7.34",
     "@types/node": "^20.3.1",
+    "@types/nodemailer": "^6.4.17",
     "@types/response-time": "^2.3.8",
     "@types/supertest": "^6.0.0",
     "@types/uuid": "^10.0.0",
