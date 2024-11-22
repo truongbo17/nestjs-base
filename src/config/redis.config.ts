@@ -36,8 +36,8 @@ export default registerAs<QueueConfigType>('redis', () => {
         : DEFAULT_PORT_REDIS,
       password: process.env.REDIS_PASSWORD,
       username: process.env.REDIS_USERNAME,
-      ttl: 5 * 1000, // 5 min
-      max: 10,
+      ttl: 5 * 60000, // 5 min
+      max: 100,
     },
     queue: {
       host: process.env.REDIS_HOST,
