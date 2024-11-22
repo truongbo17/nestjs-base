@@ -3,6 +3,7 @@ import { QueueConfigType } from './queue.config.type';
 import { ViewConfigType } from './view.config.type';
 import { DatabaseConfig } from './database.config.type';
 import { FileConfig } from './file-config.type';
+import { MiddlewareConfigType } from './middleware.config.type';
 
 export type AllConfigType = {
   app: AppConfig;
@@ -10,4 +11,5 @@ export type AllConfigType = {
   view: ViewConfigType;
   database: DatabaseConfig;
   file: FileConfig;
+  middleWare: MiddlewareConfigType;
 };

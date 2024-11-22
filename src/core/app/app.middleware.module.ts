@@ -4,6 +4,12 @@ import { APP_FILTER } from '@nestjs/core';
 import { AppGeneralFilter } from './filters/app.general.filter';
 import { AppHttpFilter } from './filters/app.http.filter';
 import { AppValidationFilter } from './filters/app.validation.filter';
+import {
+  AppJsonBodyParserMiddleware,
+  AppRawBodyParserMiddleware,
+  AppTextBodyParserMiddleware,
+  AppUrlencodedBodyParserMiddleware,
+} from './middlewares/app.body-parser.middleware';
 
 @Module({
   controllers: [],
@@ -25,6 +31,14 @@ import { AppValidationFilter } from './filters/app.validation.filter';
 })
 export class AppMiddlewareModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
-    consumer.apply(RequestLoggerMiddleware).forRoutes('*');
+    consumer
+      .apply(
+        RequestLoggerMiddleware,
+        AppJsonBodyParserMiddleware,
+        AppTextBodyParserMiddleware,
+        AppRawBodyParserMiddleware,
+        AppUrlencodedBodyParserMiddleware
+      )
+      .forRoutes('*');
   }
 }

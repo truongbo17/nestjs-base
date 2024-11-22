@@ -16,18 +16,24 @@ import { TypeOrmConfigService } from './core/database/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { I18nLangModule } from './core/i18n/i18n-lang.module';
 import { AppMiddlewareModule } from './core/app/app.middleware.module';
+import middlewareConfig from './config/middleware.config';
 
 @Module({
   imports: [
     // Logger
-    LoggerModule.forRoot(true),
-    // Config
+    LoggerModule.forRoot(true), // Config
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, queueConfig, viewConfig, databaseConfig, fileConfig],
+      load: [
+        appConfig,
+        queueConfig,
+        viewConfig,
+        databaseConfig,
+        fileConfig,
+        middlewareConfig,
+      ],
       envFilePath: ['.env'],
-    }),
-    // Database MongoDB
+    }), // Database MongoDB
     // MongooseModule.forRootAsync({
     //   connectionName: 'MONGOOSE_CONNECT',
     //   useClass: MongooseConfigService,
@@ -44,24 +50,18 @@ import { AppMiddlewareModule } from './core/app/app.middleware.module';
         }
         return await new DataSource(options).initialize();
       },
-    }),
-    // I18N
-    I18nLangModule.forRootAsync(),
-    // Schedule
+    }), // I18N
+    I18nLangModule.forRootAsync(), // Schedule
     ScheduleModule.forRoot(),
-    ScheduleModuleManage,
-    // Queue
+    ScheduleModuleManage, // Queue
     BullModule.forRoot({
       connection: {
         host: 'localhost',
         port: 6379,
       },
-    }),
-    //Middleware
-    AppMiddlewareModule,
-    // Router
-    RouterModule,
-    // Modules append...
+    }), //Middleware
+    AppMiddlewareModule, // Router
+    RouterModule, // Modules append...
   ],
   controllers: [],
   providers: [CommandService, Logger],
