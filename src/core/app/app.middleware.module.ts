@@ -15,6 +15,7 @@ import { AppCustomLanguageMiddleware } from './middlewares/app.custom-language.m
 import { AppHelmetMiddleware } from './middlewares/app.helmet.middleware';
 import { AppRequestIdMiddleware } from './middlewares/app.request-id.middleware';
 import { AppResponseTimeMiddleware } from './middlewares/app.response-time.middleware';
+import { AppUrlVersionMiddleware } from './middlewares/app.url-version.middleware';
 
 @Module({
   controllers: [],
@@ -47,7 +48,8 @@ export class AppMiddlewareModule implements NestModule {
         AppCustomLanguageMiddleware,
         AppHelmetMiddleware,
         AppRequestIdMiddleware,
-        AppResponseTimeMiddleware
+        AppResponseTimeMiddleware,
+        AppUrlVersionMiddleware
       )
       .forRoutes('*');
   }
