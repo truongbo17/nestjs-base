@@ -1,11 +1,8 @@
 import { Request } from 'express';
-import { ApiKeyPayloadDto } from 'src/modules/api-key/dtos/api-key.payload.dto';
-import { AuthJwtAccessPayloadDto } from 'src/modules/auth/dtos/jwt/auth.jwt.access-payload.dto';
 import { ResponsePagingMetadataPaginationRequestDto } from '../../response/dtos/response.dto';
+import { AuthJwtAccessPayloadDto } from '../../auth/dtos/jwt/auth.jwt.access-payload.dto';
 
-export interface IRequestApp<T = AuthJwtAccessPayloadDto, B = ApiKeyPayloadDto>
-  extends Request {
-  apiKey?: B;
+export interface IRequestApp<T = AuthJwtAccessPayloadDto> extends Request {
   user?: T;
   workspace?: string;
 
