@@ -1,5 +1,5 @@
 import { ENUM_MESSAGE_LANGUAGE } from '../common/i18n/enums/i18n.enum';
-import { Environment } from './app.config';
+import { ENUM_CACHE_STORE, Environment } from './app.config';
 
 export type AppConfig = {
   appEnv: Environment;
@@ -19,4 +19,5 @@ export type AppConfig = {
     version?: number;
   };
   repoVersion: string;
+  cacheStore: ENUM_CACHE_STORE;
 };

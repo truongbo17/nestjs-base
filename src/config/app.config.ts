@@ -28,6 +28,11 @@ export enum ENUM_APP_TIMEZONE {
   VN_HCM = 'Asia/Ho_Chi_Minh',
 }
 
+export enum ENUM_CACHE_STORE {
+  LOCAL = 'local',
+  REDIS = 'redis',
+}
+
 const DEFAULT_APP_PORT: number = 3000;
 const DEFAULT_API_PREFIX: string = 'api';
 const DEFAULT_APP_LANGUAGE: ENUM_MESSAGE_LANGUAGE = ENUM_MESSAGE_LANGUAGE.EN;
@@ -76,6 +81,10 @@ class EnvironmentVariablesValidator {
   @IsNotEmpty()
   @Type(() => Number)
   URL_VERSION!: number;
+
+  @IsEnum(ENUM_CACHE_STORE)
+  @IsNotEmpty()
+  CACHE_STORE!: string;
 }
 
 export default registerAs<AppConfig>('app', () => {
@@ -102,5 +111,6 @@ export default registerAs<AppConfig>('app', () => {
       version: process.env.URL_VERSION ? parseInt(process.env.URL_VERSION) : 1,
     },
     repoVersion: version,
+    cacheStore: <ENUM_CACHE_STORE>process.env.CACHE_STORE,
   };
 });
