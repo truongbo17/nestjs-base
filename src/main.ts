@@ -8,7 +8,6 @@ import { join } from 'node:path';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import * as process from 'node:process';
 import { Environment } from './config/app.config';
-import helmet from 'helmet';
 
 async function bootstrap() {
   // Run HTTP server
