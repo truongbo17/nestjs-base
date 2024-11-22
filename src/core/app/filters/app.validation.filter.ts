@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
@@ -15,8 +15,6 @@ import { IMessageValidationError } from '../../i18n/interfaces/i18n.interface';
 
 @Catch(RequestValidationException)
 export class AppValidationFilter implements ExceptionFilter {
-  private readonly logger = new Logger(AppValidationFilter.name);
-
   constructor(
     private readonly loggerService: LoggerService,
     private readonly i18nService: I18nLangService,
@@ -31,10 +29,10 @@ export class AppValidationFilter implements ExceptionFilter {
     const response: Response = ctx.getResponse<Response>();
     const request: IRequestApp = ctx.getRequest<IRequestApp>();
 
-    this.logger.error(exception);
+    this.loggerService.log('error', exception, AppValidationFilter.name);
 
     // metadata
-    const today = dateHelper.create();
+    const today: Date = dateHelper.create();
     const xLanguage: string =
       request.__language ??
       this.configService.getOrThrow<ENUM_MESSAGE_LANGUAGE>('app.appLanguage', {
