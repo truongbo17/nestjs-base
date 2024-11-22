@@ -12,6 +12,8 @@ import {
 } from './middlewares/app.body-parser.middleware';
 import { AppCorsMiddleware } from './middlewares/app.cors.middleware';
 import { AppCustomLanguageMiddleware } from './middlewares/app.custom-language.middleware';
+import { AppHelmetMiddleware } from './middlewares/app.helmet.middleware';
+import { AppRequestIdMiddleware } from './middlewares/app.request-id.middleware';
 
 @Module({
   controllers: [],
@@ -41,7 +43,9 @@ export class AppMiddlewareModule implements NestModule {
         AppRawBodyParserMiddleware,
         AppUrlencodedBodyParserMiddleware,
         AppCorsMiddleware,
-        AppCustomLanguageMiddleware
+        AppCustomLanguageMiddleware,
+        AppHelmetMiddleware,
+        AppRequestIdMiddleware
       )
       .forRoutes('*');
   }

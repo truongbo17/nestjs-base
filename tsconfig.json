@@ -21,7 +21,14 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "src/core/app/types/express.request.ts"
+    ]
   },
-  "include": ["src/**/*", "src/**/*.json"]
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ]
 }
