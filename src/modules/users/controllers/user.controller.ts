@@ -14,9 +14,10 @@ export class UserController {
   @DocResponse('user.ok')
   @Post('/register')
   async register(
-    @Body() { email, name, gender, password }: UserCreateRequestDto,
+    @Body() { email, name, gender, password }: UserCreateRequestDto
   ) {
-    console.log(await this.i18nService.tran('user.name'));
+    // console.log(await this.i18nService.tran('user.name'));
+    throw new Error('aasd');
     return {
       a: true,
     };
