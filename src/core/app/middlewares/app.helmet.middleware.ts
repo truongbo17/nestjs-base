@@ -5,6 +5,8 @@ import helmet from 'helmet';
 @Injectable()
 export class AppHelmetMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
-    helmet()(req, res, next);
+    helmet({
+      hidePoweredBy: true,
+    })(req, res, next);
   }
 }
