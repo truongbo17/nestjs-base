@@ -21,7 +21,7 @@ import { version } from 'package.json';
 export enum Environment {
   DEVELOPMENT = 'development',
   PRODUCTION = 'production',
-  TESTING = 'testing',
+  LOCAL = 'local',
 }
 
 export enum ENUM_APP_TIMEZONE {
@@ -82,7 +82,8 @@ export default registerAs<AppConfig>('app', () => {
   validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
-    appEnv: process.env.APP_ENV || Environment.DEVELOPMENT,
+    appEnv: <Environment>process.env.APP_ENV || Environment.DEVELOPMENT,
+    debug: true,
     name: process.env.APP_NAME || 'NestJs',
     workingDirectory: process.env.PWD || process.cwd(),
     appUrl: process.env.APP_URL || 'http://localhost',

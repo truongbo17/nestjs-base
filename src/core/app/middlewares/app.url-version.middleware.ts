@@ -12,7 +12,9 @@ export class AppUrlVersionMiddleware implements NestMiddleware {
   private readonly urlVersion: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.globalPrefix = this.configService.get<string>('app.globalPrefix');
+    this.globalPrefix = this.configService.getOrThrow<string>('app.apiPrefix', {
+      infer: true,
+    });
     this.urlVersionEnable = this.configService.getOrThrow<boolean>(
       'app.urlVersion.enable'
     );

@@ -8,7 +8,6 @@ import { BullModule } from '@nestjs/bullmq';
 import queueConfig from './config/queue.config';
 import viewConfig from './config/view.config';
 import { RouterModule } from './routers/router.module';
-import { LoggerModule } from './core/logger/logger.module';
 import databaseConfig from './config/database.config';
 import fileConfig from './config/file.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -17,11 +16,13 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 import { I18nLangModule } from './core/i18n/i18n-lang.module';
 import { AppMiddlewareModule } from './core/app/app.middleware.module';
 import middlewareConfig from './config/middleware.config';
+import { LoggerModule } from './core/logger/logger.module';
 
 @Module({
   imports: [
     // Logger
-    LoggerModule.forRoot(true), // Config
+    LoggerModule.forRoot(true),
+    // Config
     ConfigModule.forRoot({
       isGlobal: true,
       load: [

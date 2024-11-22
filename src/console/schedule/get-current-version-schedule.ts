@@ -22,7 +22,7 @@ export class GetCurrentVersionSchedule {
     this.loggerService.log(
       'log',
       'Start after 3 seconds',
-      GetCurrentVersionSchedule.name,
+      GetCurrentVersionSchedule.name
     );
   }
 

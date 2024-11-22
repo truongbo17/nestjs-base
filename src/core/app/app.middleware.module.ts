@@ -39,7 +39,7 @@ export class AppMiddlewareModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer
       .apply(
-        RequestLoggerMiddleware,
+        // RequestLoggerMiddleware,
         AppJsonBodyParserMiddleware,
         AppTextBodyParserMiddleware,
         AppRawBodyParserMiddleware,

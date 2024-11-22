@@ -16,13 +16,13 @@ export class GetCurrentVersionCommand {
   })
   async getCurrentVersion(): Promise<void> {
     const packageJson = JSON.parse(
-      fs.readFileSync(path.join(__dirname, this.PACKAGE_PATH), 'utf8'),
+      fs.readFileSync(path.join(__dirname, this.PACKAGE_PATH), 'utf8')
     );
 
     this.loggerService.log(
       'log',
       `NestJS current version: ${packageJson.dependencies[this.PACKAGE_NAME]}`,
-      GetCurrentVersionCommand.name,
+      GetCurrentVersionCommand.name
     );
   }
 }

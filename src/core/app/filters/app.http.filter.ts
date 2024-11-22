@@ -33,6 +33,12 @@ export class AppHttpFilter implements ExceptionFilter {
 
     this.loggerService.log('error', exception, AppHttpFilter.name);
 
+    // if (!request.path.startsWith('api') && !request.path.startsWith('docs')) {
+    //   response.redirect(HttpStatus.PERMANENT_REDIRECT, '/api/public/hello');
+    //
+    //   return;
+    // }
+
     // set default
     let statusHttp: HttpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
     let messagePath = `http.${statusHttp}`;

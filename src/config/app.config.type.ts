@@ -1,7 +1,9 @@
 import { ENUM_MESSAGE_LANGUAGE } from '../core/i18n/enums/i18n.enum';
+import { Environment } from './app.config';
 
 export type AppConfig = {
-  appEnv: string;
+  appEnv: Environment;
+  debug: boolean;
   name: string;
   workingDirectory: string;
   appUrl?: string;
