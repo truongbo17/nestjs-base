@@ -17,7 +17,7 @@ import { ENUM_MESSAGE_LANGUAGE } from '../../i18n/enums/i18n.enum';
 import { ENUM_REQUEST_STATUS_CODE_ERROR } from '../../request/enums/request-status.enum';
 
 export default function DocDefault<T>(
-  options: IDocDefaultOptions<T>,
+  options: IDocDefaultOptions<T>
 ): MethodDecorator {
   const docs: any[] = [];
   const schema: Record<string, any> = {
@@ -48,7 +48,7 @@ export default function DocDefault<T>(
       status: options.httpStatus,
       schema,
     }),
-    ...docs,
+    ...docs
   );
 }
 
@@ -81,13 +81,13 @@ export function Doc(options?: IDocOptions): MethodDecorator {
       httpStatus: HttpStatus.REQUEST_TIMEOUT,
       messagePath: 'http.serverError.requestTimeout',
       statusCode: ENUM_REQUEST_STATUS_CODE_ERROR.TIMEOUT,
-    }),
+    })
   );
 }
 
 export function DocResponse<T = void>(
   messagePath: string,
-  options?: IDocResponseOptions,
+  options?: IDocResponseOptions
 ): MethodDecorator {
   const docs: IDocDefaultOptions = {
     httpStatus: options?.httpStatus ?? HttpStatus.OK,

@@ -1,9 +1,9 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NextFunction, Response } from 'express';
-import { IRequestApp } from '../../request/interfaces/request.interface';
+import { IRequestApp } from '../../../common/request/interfaces/request.interface';
 import arrayHelper from '../../../utils/array.helper';
-import { ENUM_MESSAGE_LANGUAGE } from '../../i18n/enums/i18n.enum';
+import { ENUM_MESSAGE_LANGUAGE } from '../../../common/i18n/enums/i18n.enum';
 
 @Injectable()
 export class AppCustomLanguageMiddleware implements NestMiddleware {

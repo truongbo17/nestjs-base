@@ -14,7 +14,7 @@ import {
   Min,
 } from 'class-validator';
 import * as process from 'node:process';
-import { ENUM_MESSAGE_LANGUAGE } from '../core/i18n/enums/i18n.enum';
+import { ENUM_MESSAGE_LANGUAGE } from '../common/i18n/enums/i18n.enum';
 import { Type } from 'class-transformer';
 import { version } from 'package.json';
 

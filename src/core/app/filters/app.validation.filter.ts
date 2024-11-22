@@ -2,16 +2,16 @@ import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { RequestValidationException } from '../../request/exceptions/request.validation.exception';
-import { LoggerService } from '../../logger/services/logger.service';
-import { I18nLangService } from '../../i18n/services/i18n-lang.service';
+import { RequestValidationException } from '../../../common/request/exceptions/request.validation.exception';
+import { LoggerService } from '../../../common/logger/services/logger.service';
+import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
 import { AllConfigType } from '../../../config/config.type';
-import { IRequestApp } from '../../request/interfaces/request.interface';
+import { IRequestApp } from '../../../common/request/interfaces/request.interface';
 import dateHelper from '../../../utils/date.helper';
-import { ENUM_MESSAGE_LANGUAGE } from '../../i18n/enums/i18n.enum';
-import { ResponseMetadataDto } from '../../response/dtos/response.dto';
+import { ENUM_MESSAGE_LANGUAGE } from '../../../common/i18n/enums/i18n.enum';
+import { ResponseMetadataDto } from '../../../common/response/dtos/response.dto';
 import { IAppException } from '../interfaces/app.interface';
-import { IMessageValidationError } from '../../i18n/interfaces/i18n.interface';
+import { IMessageValidationError } from '../../../common/i18n/interfaces/i18n.interface';
 
 @Catch(RequestValidationException)
 export class AppValidationFilter implements ExceptionFilter {

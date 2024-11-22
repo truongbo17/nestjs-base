@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron, Timeout } from '@nestjs/schedule';
 import { execSync } from 'child_process';
-import { LoggerService } from '../../core/logger/services/logger.service';
+import { LoggerService } from '../../common/logger/services/logger.service';
 
 @Injectable()
 export class GetCurrentVersionSchedule {

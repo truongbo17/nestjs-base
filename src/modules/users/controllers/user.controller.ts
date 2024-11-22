@@ -2,8 +2,8 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { UserCreateRequestDto } from '../dtos/requests/user.create.request.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UserRegisterDoc } from '../docs/user.user.doc';
-import { I18nLangService } from '../../../core/i18n/services/i18n-lang.service';
-import { DocResponse } from '../../../core/docs/decorators/doc.decorator';
+import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
+import { DocResponse } from '../../../common/docs/decorators/doc.decorator';
 
 @ApiTags('modules.user')
 @Controller()

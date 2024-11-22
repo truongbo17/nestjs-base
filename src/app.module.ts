@@ -11,12 +11,12 @@ import { RouterModule } from './routers/router.module';
 import databaseConfig from './config/database.config';
 import fileConfig from './config/file.config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { TypeOrmConfigService } from './core/database/typeorm-config.service';
+import { TypeOrmConfigService } from './common/database/typeorm-config.service';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { I18nLangModule } from './core/i18n/i18n-lang.module';
+import { I18nLangModule } from './common/i18n/i18n-lang.module';
 import { AppMiddlewareModule } from './core/app/app.middleware.module';
 import middlewareConfig from './config/middleware.config';
-import { LoggerModule } from './core/logger/logger.module';
+import { LoggerModule } from './common/logger/logger.module';
 
 @Module({
   imports: [

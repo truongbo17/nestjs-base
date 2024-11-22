@@ -1,7 +1,7 @@
 import { Command, Console } from 'nestjs-console';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
-import { LoggerService } from '../../core/logger/services/logger.service';
+import { LoggerService } from '../../common/logger/services/logger.service';
 
 @Console()
 export class GetCurrentVersionCommand {

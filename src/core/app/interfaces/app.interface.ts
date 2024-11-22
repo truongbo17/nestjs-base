@@ -3,8 +3,8 @@ import {
   IMessageValidationError,
   IMessageValidationImportError,
   IMessageValidationImportErrorParam,
-} from '../../i18n/interfaces/i18n.interface';
-import { IResponseMetadata } from '../../response/interfaces/response.interface';
+} from '../../../common/i18n/interfaces/i18n.interface';
+import { IResponseMetadata } from '../../../common/response/interfaces/response.interface';
 
 export interface IAppException {
   statusCode: number;
