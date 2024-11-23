@@ -6,19 +6,19 @@ export class LoggerService {
     const logger: Logger = new Logger(context);
     switch (level) {
       case 'log':
-        logger.log(message, context);
+        logger.log(message);
         break;
       case 'error':
-        logger.error(message, context);
+        logger.error(message);
         break;
       case 'warn':
-        logger.warn(message, context);
+        logger.warn(message);
         break;
       case 'debug':
-        logger.debug(message, context);
+        logger.debug(message);
         break;
       case 'verbose':
-        logger.verbose(message, context);
+        logger.verbose(message);
         break;
       default:
         logger.log(`Unknown log level: ${level}. Message: ${message}`, context);

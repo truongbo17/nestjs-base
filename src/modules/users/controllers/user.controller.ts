@@ -44,7 +44,7 @@ export class UserController {
   @Post('/upload')
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    console.log(await this.uploadService.upload(file, 'local'));
+    // console.log(file);
+    console.log(await this.uploadService.upload(file, 's3'));
   }
 }

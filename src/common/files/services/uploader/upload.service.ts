@@ -38,7 +38,7 @@ export class UploaderService {
     await storage.deleteFile(filePath);
   }
 
-  async getFile(filePath: string, storageType: string): Promise<Readable> {
+  async getFile(filePath: string, storageType: string): Promise<string> {
     const storage: StorageUploadInterface = StorageFactory.create(
       storageType,
       this.configService

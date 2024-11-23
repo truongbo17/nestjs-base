@@ -11,4 +11,5 @@ export type FileConfig = {
   awsS3Region?: string;
   maxFileSize: number;
   pathLocal?: string;
+  endpoint?: string;
 };

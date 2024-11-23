@@ -24,6 +24,10 @@ class EnvironmentVariablesValidator {
   @ValidateIf(envValues => [FileDriver.S3].includes(envValues.FILE_DRIVER))
   @IsString()
   AWS_S3_REGION?: string;
+
+  @ValidateIf(envValues => [FileDriver.S3].includes(envValues.FILE_DRIVER))
+  @IsString()
+  AWS_URL?: string;
 }
 
 export default registerAs<FileConfig>('file', () => {
@@ -38,5 +42,6 @@ export default registerAs<FileConfig>('file', () => {
     awsS3Region: process.env.AWS_S3_REGION,
     maxFileSize: 5242880, // 5mb
     pathLocal: path.join(process.env.PWD || process.cwd(), 'storage'),
+    endpoint: process.env.AWS_URL,
   };
 });

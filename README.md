@@ -53,6 +53,6 @@ $ npm run test:cov
 * Swagger
 * View (hbs engine)
 * Logger
-* Database (Relation & MongoDB)
-  * npm run migration:create src/database/migrations/create-table-session
-  * npm run migration:run
+* Database
+* Mail
+* File upload

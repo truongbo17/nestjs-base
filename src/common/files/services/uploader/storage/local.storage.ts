@@ -13,7 +13,7 @@ export class LocalStorage implements StorageUploadInterface {
     );
   }
 
-  async uploadFile(file: Express.Multer.File): Promise<string> {
+  async uploadFile(file: Express.Multer.File): Promise<any> {
     const filePath: string = path.join(this.uploadPath, file.originalname);
 
     if (!fs.existsSync(this.uploadPath)) {
@@ -38,11 +38,12 @@ export class LocalStorage implements StorageUploadInterface {
     }
   }
 
-  async getFile(filePath: string): Promise<Readable> {
+  async getFile(filePath: string): Promise<string> {
     if (!fs.existsSync(filePath)) {
       throw new Error('File not found');
     }
 
-    return fs.createReadStream(filePath);
+    return filePath;
+    // return fs.createReadStream(filePath);
   }
 }
