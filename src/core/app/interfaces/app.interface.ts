@@ -7,6 +7,7 @@ import {
 import { IResponseMetadata } from '../../../common/response/interfaces/response.interface';
 
 export interface IAppException {
+  success: boolean;
   statusCode: number;
   message: string;
   errors?: IMessageValidationError[] | ValidationError[];

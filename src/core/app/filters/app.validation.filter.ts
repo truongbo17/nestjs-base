@@ -70,6 +70,7 @@ export class AppValidationFilter implements ExceptionFilter {
       });
 
     const responseBody: IAppException = {
+      success: false,
       statusCode: exception.statusCode,
       message,
       errors,

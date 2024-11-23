@@ -83,6 +83,7 @@ export class AppGeneralFilter implements ExceptionFilter {
     });
 
     const responseBody: IAppException = {
+      success: false,
       statusCode,
       message,
       _metadata: metadata,
