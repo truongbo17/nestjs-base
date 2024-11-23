@@ -3,6 +3,7 @@ import { StorageUploadInterface } from '../../interfaces/storage-upload.interfac
 import { StorageFactory } from './storage.factory';
 import { Readable } from 'stream';
 import { ConfigService } from '@nestjs/config';
+import { UploadFileInterface } from '../../interfaces/upload-file.interface';
 
 @Injectable()
 export class UploaderService {
@@ -11,7 +12,7 @@ export class UploaderService {
   async upload(
     file: Express.Multer.File,
     storageType: string
-  ): Promise<string> {
+  ): Promise<UploadFileInterface> {
     const storage: StorageUploadInterface = StorageFactory.create(
       storageType,
       this.configService
@@ -22,7 +23,7 @@ export class UploaderService {
   async uploadMultiple(
     files: Express.Multer.File[],
     storageType: string
-  ): Promise<string[]> {
+  ): Promise<UploadFileInterface[]> {
     const storage: StorageUploadInterface = StorageFactory.create(
       storageType,
       this.configService
@@ -38,11 +39,19 @@ export class UploaderService {
     await storage.deleteFile(filePath);
   }
 
-  async getFile(filePath: string, storageType: string): Promise<string> {
+  async getFile(filePath: string, storageType: string): Promise<Readable> {
     const storage: StorageUploadInterface = StorageFactory.create(
       storageType,
       this.configService
     );
     return storage.getFile(filePath);
+  }
+
+  async getUrl(filePath: string, storageType: string): Promise<string> {
+    const storage: StorageUploadInterface = StorageFactory.create(
+      storageType,
+      this.configService
+    );
+    return storage.getUrl(filePath);
   }
 }
