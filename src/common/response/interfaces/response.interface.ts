@@ -22,9 +22,13 @@ export interface IResponseOptions {
 }
 
 // response
-export interface IResponse<T = void> {
+export interface IResponse {
+  success: boolean;
+  statusCode: HttpStatus.OK;
+  message: string;
+  errors?: [];
   _metadata?: IResponseMetadata;
-  data?: T;
+  data?: object;
 }
 
 // response pagination

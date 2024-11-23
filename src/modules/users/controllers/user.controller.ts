@@ -4,6 +4,7 @@ import {
   Inject,
   InternalServerErrorException,
   Post,
+  Req,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -11,17 +12,15 @@ import { UserCreateRequestDto } from '../dtos/requests/user.create.request.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UserRegisterDoc } from '../docs/user.user.doc';
 import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
-import { DocResponse } from '../../../common/docs/decorators/doc.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { UploaderService } from '../../../common/files/services/uploader/upload.service';
-import {
-  IResponse,
-  IResponseMetadata,
-} from '../../../common/response/interfaces/response.interface';
+import { IResponse } from '../../../common/response/interfaces/response.interface';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
+import { responseSuccess } from '../../../common/response/ultils/response.helper';
+import { Request } from 'express';
 
 @ApiTags('modules.user')
 @Controller()
@@ -37,18 +36,25 @@ export class UserController {
   @UserRegisterDoc()
   @Post('/register')
   async register(
-    @Body() { email, name, gender, password }: UserCreateRequestDto
-  ): Promise<IResponse<IResponseMetadata>> {
+    @Body() { email, name, gender, password }: UserCreateRequestDto,
+    @Req() request: Request
+  ): Promise<IResponse> {
     try {
       const emailExist: boolean = await this.userService.existByEmail(email);
 
       await this.authService.createPassword(password);
-      throw new Error('a');
-      console.log(emailExist);
+      // throw new Error('a');
+      // console.log(emailExist);
 
-      return {
-        data: { id: 1 },
-      };
+      return responseSuccess(
+        {
+          message: '',
+          success: false,
+          statusCode: 200,
+          data: { id: 1 },
+        },
+        request
+      );
     } catch (e) {
       throw new InternalServerErrorException({
         statusCode: 1,
