@@ -43,5 +43,6 @@ export default registerAs<FileConfig>('file', () => {
     maxFileSize: 5242880, // 5mb
     pathLocal: path.join(process.env.PWD || process.cwd(), 'storage'),
     endpoint: process.env.AWS_URL,
+    expiresIn: 3600,
   };
 });

@@ -12,4 +12,5 @@ export type FileConfig = {
   maxFileSize: number;
   pathLocal?: string;
   endpoint?: string;
+  expiresIn: number;
 };

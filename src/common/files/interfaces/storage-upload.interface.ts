@@ -1,9 +1,14 @@
+import { UploadFileInterface } from './upload-file.interface';
+import { Readable } from 'stream';
+
 export interface StorageUploadInterface {
-  uploadFile(file: Express.Multer.File): Promise<any>;
+  uploadFile(file: Express.Multer.File): Promise<UploadFileInterface>;
 
-  uploadFiles(files: Express.Multer.File[]): Promise<string[]>;
+  uploadFiles(files: Express.Multer.File[]): Promise<UploadFileInterface[]>;
 
-  deleteFile(filePath: string): Promise<void>;
+  deleteFile(filePath: string): Promise<boolean>;
 
-  getFile(filePath: string): Promise<string>;
+  getUrl(filePath: string): Promise<string>;
+
+  getFile(filePath: string): Promise<Readable>;
 }
