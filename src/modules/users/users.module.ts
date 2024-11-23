@@ -4,6 +4,4 @@ import { UserController } from './controllers/user.controller';
 @Module({
   controllers: [UserController],
 })
-export class UsersModule {
-  async create() {}
-}
+export class UsersModule {}

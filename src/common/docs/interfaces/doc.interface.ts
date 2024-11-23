@@ -2,7 +2,7 @@ import { HttpStatus } from '@nestjs/common';
 import { ApiParamOptions, ApiQueryOptions } from '@nestjs/swagger';
 import { ClassConstructor } from 'class-transformer';
 import { ENUM_DOC_REQUEST_BODY_TYPE } from '../enums/doc.enum';
-import { ENUM_FILE_MIME } from '../../../core/files/enums/file.enum';
+import { ENUM_FILE_MIME } from '../../files/enums/file.enum';
 
 export interface IDocOptions {
   summary?: string;

@@ -44,3 +44,8 @@ export type ENUM_FILE_MIME =
   | ENUM_FILE_MIME_EXCEL
   | ENUM_FILE_MIME_AUDIO
   | ENUM_FILE_MIME_VIDEO;
+
+export enum ENUM_STORAGE {
+  LOCAL = 'LOCAL',
+  S3 = 'S3',
+}
