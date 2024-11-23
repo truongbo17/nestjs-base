@@ -2,9 +2,16 @@ import { StorageUploadInterface } from '../../../interfaces/storage-upload.inter
 import { Readable } from 'stream';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
+import { ConfigService } from '@nestjs/config';
 
 export class LocalStorage implements StorageUploadInterface {
-  private readonly uploadPath: string = path.join(__dirname, '..', 'uploads');
+  private readonly uploadPath: string;
+
+  constructor(private readonly configService: ConfigService) {
+    this.uploadPath = <string>(
+      this.configService.getOrThrow('file.pathLocal', { infer: true })
+    );
+  }
 
   async uploadFile(file: Express.Multer.File): Promise<string> {
     const filePath: string = path.join(this.uploadPath, file.originalname);

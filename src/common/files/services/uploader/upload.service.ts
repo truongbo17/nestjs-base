@@ -1,20 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { StorageUploadInterface } from '../../interfaces/storage-upload.interface';
 import { StorageFactory } from './storage.factory';
-import { ENUM_STORAGE } from '../../enums/file.enum';
 import { Readable } from 'stream';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UploaderService {
-  static storage(storage?: ENUM_STORAGE) {
-    return this;
-  }
+  constructor(private readonly configService: ConfigService) {}
 
   async upload(
     file: Express.Multer.File,
     storageType: string
   ): Promise<string> {
-    const storage: StorageUploadInterface = StorageFactory.create(storageType);
+    const storage: StorageUploadInterface = StorageFactory.create(
+      storageType,
+      this.configService
+    );
     return storage.uploadFile(file);
   }
 
@@ -22,17 +23,26 @@ export class UploaderService {
     files: Express.Multer.File[],
     storageType: string
   ): Promise<string[]> {
-    const storage: StorageUploadInterface = StorageFactory.create(storageType);
+    const storage: StorageUploadInterface = StorageFactory.create(
+      storageType,
+      this.configService
+    );
     return storage.uploadFiles(files);
   }
 
   async delete(filePath: string, storageType: string): Promise<void> {
-    const storage: StorageUploadInterface = StorageFactory.create(storageType);
+    const storage: StorageUploadInterface = StorageFactory.create(
+      storageType,
+      this.configService
+    );
     await storage.deleteFile(filePath);
   }
 
   async getFile(filePath: string, storageType: string): Promise<Readable> {
-    const storage: StorageUploadInterface = StorageFactory.create(storageType);
+    const storage: StorageUploadInterface = StorageFactory.create(
+      storageType,
+      this.configService
+    );
     return storage.getFile(filePath);
   }
 }

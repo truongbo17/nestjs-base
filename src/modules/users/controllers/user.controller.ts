@@ -14,13 +14,15 @@ import { DocResponse } from '../../../common/docs/decorators/doc.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { UploaderService } from '../../../common/files/services/uploader/upload.service';
 
 @ApiTags('modules.user')
 @Controller()
 export class UserController {
   constructor(
     private readonly i18nService: I18nLangService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly uploadService: UploaderService
   ) {}
 
   @UserRegisterDoc()
@@ -43,5 +45,6 @@ export class UserController {
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file: Express.Multer.File) {
     console.log(file);
+    console.log(await this.uploadService.upload(file, 'local'));
   }
 }

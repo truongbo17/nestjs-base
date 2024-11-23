@@ -25,7 +25,7 @@ export class I18nLangModule {
               {}
             ),
             loaderOptions: {
-              path: path.join(__dirname, '../../lang/'),
+              path: path.join(process.env.PWD || process.cwd(), 'src/lang/'),
               watch: true,
             },
           }),

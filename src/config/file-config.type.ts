@@ -1,7 +1,6 @@
 export enum FileDriver {
   LOCAL = 'local',
   S3 = 's3',
-  S3_PRESIGNED = 's3-presigned',
 }
 
 export type FileConfig = {
@@ -11,4 +10,5 @@ export type FileConfig = {
   awsDefaultS3Bucket?: string;
   awsS3Region?: string;
   maxFileSize: number;
+  pathLocal?: string;
 };

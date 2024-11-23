@@ -1,8 +1,11 @@
 import { StorageUploadInterface } from '../../../interfaces/storage-upload.interface';
 import { Promise } from 'mongoose';
 import { Readable } from 'stream';
+import { ConfigService } from '@nestjs/config';
 
 export class S3Storage implements StorageUploadInterface {
+  constructor(private readonly configService: ConfigService) {}
+
   deleteFile(filePath: string): Promise<void> {
     return Promise.resolve(undefined);
   }
