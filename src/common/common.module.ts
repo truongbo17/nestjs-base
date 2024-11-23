@@ -16,6 +16,7 @@ import mailConfig from '../config/mail.config';
 import { CacheModule } from './cache/cache.module';
 import { QueueModule } from './queue/queue.module';
 import { FileModule } from './files/file.module';
+import { AuthModule } from '../core/auth/auth.module';
 
 @Module({
   controllers: [],

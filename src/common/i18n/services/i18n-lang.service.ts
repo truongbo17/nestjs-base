@@ -26,7 +26,7 @@ export class I18nLangService implements I18nServiceInterface {
       { infer: true }
     ) as ENUM_MESSAGE_LANGUAGE;
     this.availableLanguage = this.configService.get<ENUM_MESSAGE_LANGUAGE[]>(
-      'message.availableLanguage'
+      'app.availableLanguage'
     ) as ENUM_MESSAGE_LANGUAGE[];
   }
 
