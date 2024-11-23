@@ -35,7 +35,6 @@ export class UserController {
   ) {}
 
   @UserRegisterDoc()
-  @DocResponse('user.ok')
   @Post('/register')
   async register(
     @Body() { email, name, gender, password }: UserCreateRequestDto

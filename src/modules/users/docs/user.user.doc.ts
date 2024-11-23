@@ -9,6 +9,6 @@ export function UserRegisterDoc(): MethodDecorator {
     Doc({
       summary: 'Register new user',
     }),
-    DocResponse('user.register')
+    DocResponse('user.register', { success: true })
   );
 }

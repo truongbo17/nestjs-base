@@ -10,7 +10,7 @@ import * as process from 'node:process';
 import { Environment } from './config/app.config';
 import compression from 'compression';
 import { useContainer } from 'class-validator';
-import { VersioningType } from '@nestjs/common';
+import { ValidationPipe, VersioningType } from '@nestjs/common';
 
 async function bootstrap() {
   // Run HTTP server
@@ -44,6 +44,7 @@ async function bootstrap() {
 
   // For Custom Validation
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.useGlobalPipes(new ValidationPipe());
 
   // Versioning
   const versionEnable: boolean = configService.get<boolean>(

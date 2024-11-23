@@ -12,9 +12,11 @@ export interface IDocOptions {
 }
 
 export interface IDocOfOptions<T = any> {
+  success: boolean;
   statusCode: number;
   messagePath: string;
   dto?: ClassConstructor<T>;
+  data: object;
 }
 
 export interface IDocDefaultOptions<T = any> extends IDocOfOptions<T> {
@@ -44,9 +46,11 @@ export interface IDocGuardOptions {
 }
 
 export interface IDocResponseOptions<T = any> {
+  success?: boolean;
   statusCode?: number;
   httpStatus?: HttpStatus;
   dto?: ClassConstructor<T>;
+  data?: object;
 }
 
 export interface IDocResponseFileOptions

@@ -28,6 +28,7 @@ export class I18nLangModule {
               path: path.join(process.env.PWD || process.cwd(), 'src/lang/'),
               watch: true,
             },
+            returnNull: true,
           }),
           resolvers: [
             {

@@ -31,7 +31,8 @@
         "notImplemented": "Not Implemented",
         "badGateway": "Bad Gateway",
         "serviceUnavailable": "Service Unavailable",
-        "gatewayTimeout": "Gateway Timeout"
+        "gatewayTimeout": "Gateway Timeout",
+        "requestTimeout": "Request Timeout"
     },
 
     "200": "OK",

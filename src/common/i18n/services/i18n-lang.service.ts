@@ -40,6 +40,9 @@ export class I18nLangService implements I18nServiceInterface {
 
   //! set message by path  base on language
   setMessage(path: string, options?: IMessageSetOptions): string {
+    if (Array.isArray(path)) {
+      path = path[0] ?? 'request.unknownMessage';
+    }
     const language: string = options?.customLanguage
       ? this.filterLanguage(options.customLanguage)[0]
       : this.defaultLanguage;

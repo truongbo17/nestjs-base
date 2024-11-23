@@ -14,7 +14,6 @@ import {
 import { ResponseDto } from '../../response/dtos/response.dto';
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import { ENUM_MESSAGE_LANGUAGE } from '../../i18n/enums/i18n.enum';
-import { ENUM_REQUEST_STATUS_CODE_ERROR } from '../../request/enums/request-status.enum';
 
 export default function DocDefault<T>(
   options: IDocDefaultOptions<T>
@@ -23,12 +22,21 @@ export default function DocDefault<T>(
   const schema: Record<string, any> = {
     allOf: [{ $ref: getSchemaPath(ResponseDto) }],
     properties: {
+      success: {
+        example: options.success ?? false,
+        type: 'boolean',
+      },
       message: {
         example: options.messagePath,
+        type: 'string',
       },
       statusCode: {
         type: 'number',
         example: options.statusCode,
+      },
+      data: {
+        example: options.data ?? {},
+        type: 'object',
       },
     },
   };
@@ -73,14 +81,18 @@ export function Doc(options?: IDocOptions): MethodDecorator {
       },
     ]),
     DocDefault({
-      httpStatus: HttpStatus.INTERNAL_SERVER_ERROR,
-      messagePath: 'http.serverError.internalServerError',
-      statusCode: ENUM_REQUEST_STATUS_CODE_ERROR.UNKNOWN,
+      data: {},
+      success: false,
+      httpStatus: HttpStatus.SERVICE_UNAVAILABLE,
+      messagePath: 'http.serverError.serviceUnavailable',
+      statusCode: HttpStatus.SERVICE_UNAVAILABLE,
     }),
     DocDefault({
+      data: {},
+      success: false,
       httpStatus: HttpStatus.REQUEST_TIMEOUT,
       messagePath: 'http.serverError.requestTimeout',
-      statusCode: ENUM_REQUEST_STATUS_CODE_ERROR.TIMEOUT,
+      statusCode: HttpStatus.REQUEST_TIMEOUT,
     })
   );
 }
@@ -90,6 +102,8 @@ export function DocResponse<T = void>(
   options?: IDocResponseOptions
 ): MethodDecorator {
   const docs: IDocDefaultOptions = {
+    data: options?.data ?? {},
+    success: options?.success ?? false,
     httpStatus: options?.httpStatus ?? HttpStatus.OK,
     messagePath,
     statusCode: options?.statusCode ?? options?.httpStatus ?? HttpStatus.OK,
