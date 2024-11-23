@@ -5,6 +5,11 @@ export enum ENUM_FILE_TYPE {
   VIDEO = 'video',
 }
 
+export enum ENUM_HELPER_FILE_EXCEL_TYPE {
+  XLSX = 'xlsx',
+  CSV = 'csv',
+}
+
 export enum ENUM_FILE_MIME_IMAGE {
   JPG = 'image/jpg',
   JPEG = 'image/jpeg',

@@ -16,11 +16,14 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { UploaderService } from '../../../common/files/services/uploader/upload.service';
-import { IResponse } from '../../../common/response/interfaces/response.interface';
+import {
+  IResponse,
+  IResponseMetadata,
+} from '../../../common/response/interfaces/response.interface';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
-import { responseSuccess } from '../../../common/response/ultils/response.helper';
 import { Request } from 'express';
+import { Response } from 'src/common/response/decorators/response.decorator';
 
 @ApiTags('modules.user')
 @Controller()
@@ -35,10 +38,11 @@ export class UserController {
 
   @UserRegisterDoc()
   @Post('/register')
+  @Response('auth.signUp', { success: false })
   async register(
     @Body() { email, name, gender, password }: UserCreateRequestDto,
     @Req() request: Request
-  ): Promise<IResponse> {
+  ) {
     try {
       const emailExist: boolean = await this.userService.existByEmail(email);
 
@@ -46,15 +50,7 @@ export class UserController {
       // throw new Error('a');
       // console.log(emailExist);
 
-      return responseSuccess(
-        {
-          message: '',
-          success: false,
-          statusCode: 200,
-          data: { id: 1 },
-        },
-        request
-      );
+      return { data: { test: true } };
     } catch (e) {
       throw new InternalServerErrorException({
         statusCode: 1,

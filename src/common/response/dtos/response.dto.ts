@@ -7,13 +7,24 @@ export class ResponseMetadataDto {
   timestamp: number;
   timezone: string;
   path: string;
-  version: string;
-  repoVersion: string;
+  version?: string;
+  repoVersion?: string;
 
   [key: string]: any;
 }
 
 export class ResponseDto {
+  @ApiProperty({
+    name: 'success',
+    type: 'boolean',
+    required: true,
+    nullable: false,
+    description: 'status api',
+    example: true,
+    default: true,
+  })
+  success: boolean;
+
   @ApiProperty({
     name: 'statusCode',
     type: 'number',

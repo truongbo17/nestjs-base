@@ -1,5 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { IMessageOptionsProperties } from '../../i18n/interfaces/i18n.interface';
+import { ENUM_HELPER_FILE_EXCEL_TYPE } from '../../files/enums/file.enum';
 
 export interface IResponseCustomProperty {
   statusCode?: number;
@@ -17,6 +18,7 @@ export interface IResponseMetadata {
 
 // decorator options
 export interface IResponseOptions {
+  success?: boolean;
   messageProperties?: IMessageOptionsProperties;
   cached?: IResponseCacheOptions | boolean;
 }
@@ -47,4 +49,8 @@ export interface IResponsePaging<T> {
 export interface IResponseCacheOptions {
   key?: string;
   ttl?: number;
+}
+
+export interface IResponseFileExcelOptions {
+  type?: ENUM_HELPER_FILE_EXCEL_TYPE;
 }
