@@ -16,7 +16,10 @@ import {
   RESPONSE_MESSAGE_PROPERTIES_META_KEY,
   RESPONSE_SUCCESS_META_KEY,
 } from 'src/common/response/constants/response.constant';
-import { IResponse } from 'src/common/response/interfaces/response.interface';
+import {
+  IResponse,
+  ResponseInterceptorInterface,
+} from 'src/common/response/interfaces/response.interface';
 import {
   ResponseDto,
   ResponseMetadataDto,
@@ -90,7 +93,7 @@ export class ResponseInterceptor
           };
 
           // response
-          const responseData = (await res) as IResponse;
+          const responseData = (await res) as ResponseInterceptorInterface;
 
           if (responseData.data) {
             const { _metadata } = responseData;

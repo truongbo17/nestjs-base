@@ -36,17 +36,6 @@ export class UserCreateRequestDto {
 
   @ApiProperty({
     required: true,
-    maxLength: 50,
-    minLength: 6,
-  })
-  @IsNotEmpty()
-  @IsPassword()
-  @MaxLength(50)
-  @MinLength(6)
-  password: string;
-
-  @ApiProperty({
-    required: true,
     enum: ENUM_USER_GENDER,
     example: ENUM_USER_GENDER.MALE,
   })
