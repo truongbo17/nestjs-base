@@ -30,19 +30,6 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'provider',
-            type: 'varchar',
-            length: '50',
-            default: "'email'",
-            isNullable: false,
-          },
-          {
-            name: 'social_id',
-            type: 'varchar',
-            length: '255',
-            isNullable: true,
-          },
-          {
             name: 'name',
             type: 'varchar',
             length: '255',
@@ -52,25 +39,8 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
             name: 'gender',
             type: 'enum',
             enum: Object.values(ENUM_USER_GENDER),
-            isNullable: true,
-          },
-          {
-            name: 'created_at',
-            type: 'timestamp',
-            default: 'CURRENT_TIMESTAMP',
+            default: ENUM_USER_GENDER.MALE,
             isNullable: false,
-          },
-          {
-            name: 'updated_at',
-            type: 'timestamp',
-            default: null,
-            onUpdate: 'CURRENT_TIMESTAMP',
-            isNullable: true,
-          },
-          {
-            name: 'deleted_at',
-            type: 'timestamp',
-            isNullable: true,
           },
           {
             name: 'avatar',
@@ -78,19 +48,33 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
             isNullable: true,
           },
           {
-            name: 'role_id',
-            type: 'int',
-            isNullable: true,
-          },
-          {
             name: 'status',
             type: 'enum',
             enum: Object.values(ENUM_USER_STATUS),
+            default: ENUM_USER_STATUS.ACTIVE,
+            isNullable: false,
+          },
+          {
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            isNullable: false,
+          },
+          {
+            name: 'updatedAt',
+            type: 'timestamp',
+            default: null,
+            onUpdate: 'CURRENT_TIMESTAMP',
+            isNullable: true,
+          },
+          {
+            name: 'deletedAt',
+            type: 'timestamp',
             isNullable: true,
           },
         ],
       }),
-      true,
+      true
     );
   }
 

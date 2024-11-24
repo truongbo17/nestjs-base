@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { faker } from '@faker-js/faker';
+import { ApiProperty } from '@nestjs/swagger';
 import { ENUM_AUTH_LOGIN_FROM } from '../../enums/auth.enum';
 
 export class AuthJwtAccessPayloadDto {
@@ -21,7 +21,7 @@ export class AuthJwtAccessPayloadDto {
     required: true,
     nullable: false,
   })
-  _id: string;
+  id: string;
 
   @ApiProperty({
     required: true,

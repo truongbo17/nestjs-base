@@ -9,6 +9,7 @@ import {
   MinLength,
 } from 'class-validator';
 import { ENUM_USER_GENDER } from '../../enums/user.enum';
+import { IsPassword } from '../../../../common/request/validations/request.is-password.validation';
 
 export class UserCreateRequestDto {
   @ApiProperty({
@@ -38,7 +39,8 @@ export class UserCreateRequestDto {
     maxLength: 50,
     minLength: 6,
   })
-  @IsString()
+  @IsNotEmpty()
+  @IsPassword()
   @MaxLength(50)
   @MinLength(6)
   password: string;

@@ -6,6 +6,7 @@ import { FileConfig } from './file-config.type';
 import { MiddlewareConfigType } from './middleware.config.type';
 import { RedisConfigType } from './redis.config.type';
 import { MailConfigType } from './mail-config.type';
+import { AuthConfigType } from './auth.config.type';
 
 export type AllConfigType = {
   app: AppConfig;
@@ -16,4 +17,5 @@ export type AllConfigType = {
   middleWare: MiddlewareConfigType;
   redis: RedisConfigType;
   mail: MailConfigType;
+  auth: AuthConfigType;
 };
