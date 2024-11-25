@@ -28,7 +28,6 @@ import { ENUM_USER_STATUS_CODE_ERROR } from '../enums/user.status-code.enum';
 import { APP_STATUS_CODE_ERROR } from '../../../core/app/enums/app.enum';
 import { UserEntity } from '../repositories/entities/user.entity';
 import { Queue } from 'bullmq';
-import { UserQueueEnum } from '../enums/user.queue';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ENUM_WORKER_QUEUES } from '../../../workers/enums/worker.enum';
 
@@ -74,13 +73,13 @@ export class UserController {
       );
 
       await this.emailQueue.add(
-        UserQueueEnum.REGISTER,
+        ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE,
         {
           send: { email, name },
         },
         {
           debounce: {
-            id: `${UserQueueEnum.REGISTER}-${user.id}`,
+            id: `${ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE}-${user.id}`,
             ttl: 1000,
           },
         }
