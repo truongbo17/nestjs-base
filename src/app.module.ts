@@ -3,9 +3,18 @@ import { RouterModule } from './routers/router.module';
 import { AppMiddlewareModule } from './core/app/app.middleware.module';
 import { WorkerModule } from './workers/worker.module';
 import { CommonModule } from './common/common.module';
+import { TypeOrmConfigService } from './common/database/typeorm-config.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 @Module({
   imports: [
+    TypeOrmModule.forRootAsync({
+      useClass: TypeOrmConfigService,
+      dataSourceFactory: async (options: DataSourceOptions) => {
+        return new DataSource(options).initialize();
+      },
+    }),
     //Middleware
     AppMiddlewareModule,
     // Common

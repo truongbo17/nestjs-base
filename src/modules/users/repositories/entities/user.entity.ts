@@ -19,7 +19,7 @@ export class UserEntity extends EntityRelational {
   @Column({ type: String, unique: true, nullable: false })
   email: string;
 
-  @Column({ nullable: true })
+  @Column({ type: String, nullable: true })
   password?: string | null;
 
   @Index()

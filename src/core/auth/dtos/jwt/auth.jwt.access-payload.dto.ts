@@ -21,7 +21,7 @@ export class AuthJwtAccessPayloadDto {
     required: true,
     nullable: false,
   })
-  id: string;
+  id: number;
 
   @ApiProperty({
     required: true,

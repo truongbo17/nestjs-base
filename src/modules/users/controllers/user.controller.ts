@@ -8,7 +8,6 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { UserCreateRequestDto } from '../dtos/requests/user.create.request.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { UserRegisterDoc } from '../docs/user.user.doc';
 import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
@@ -24,6 +23,7 @@ import { Response } from 'src/common/response/decorators/response.decorator';
 import { UserCreateResponseDto } from '../dtos/responses/user.create.response.dto';
 import dateHelper from '../../../utils/date.helper';
 import { AuthSignUpRequestDto } from '../../../core/auth/dtos/request/auth.sign-up.request.dto';
+import { IAuthPassword } from '../../../core/auth/interfaces/auth.interface';
 
 @ApiTags('modules.user')
 @Controller()
@@ -44,18 +44,25 @@ export class UserController {
     @Req() request: Request
   ): Promise<IResponse<UserCreateResponseDto>> {
     try {
-      const emailExist: boolean = await this.userService.existByEmail(email);
+      // const emailExist: boolean = await this.userService.existByEmail(email);
+      // console.log(emailExist);
 
-      await this.authService.createPassword(password);
+      const passwordHash: IAuthPassword =
+        await this.authService.createPassword(password);
       // throw new Error('a');
       // console.log(emailExist);
 
-      return {
-        data: {
-          id: 1,
-          createdAt: dateHelper.create(),
-          updatedAt: dateHelper.create(),
+      const user = await this.userService.create(
+        {
+          email,
+          name,
+          gender,
         },
+        passwordHash
+      );
+
+      return {
+        data: user,
       };
     } catch (e) {
       throw new InternalServerErrorException({
