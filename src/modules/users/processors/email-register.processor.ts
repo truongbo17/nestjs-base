@@ -6,7 +6,7 @@ import { EmailSendDto } from '../../../common/mailer/dtos/email.send.dto';
 import { MailerService } from '../../../common/mailer/mailer.service';
 import { EmailWorkerDto } from '../../../common/mailer/dtos/email.worker.dto';
 import { IEmailRegisterProcessor } from '../interfaces/email-register.processor.interface';
-import path from 'path';
+import path from 'node:path';
 import { ConfigService } from '@nestjs/config';
 import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
 
