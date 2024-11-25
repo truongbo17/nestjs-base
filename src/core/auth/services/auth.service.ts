@@ -40,10 +40,6 @@ export class AuthService implements IAuthService {
   private readonly passwordAttempt: boolean;
   private readonly passwordMaxAttempt: number;
 
-  // apple
-  private readonly appleClientId: string;
-  private readonly appleSignInClientId: string;
-
   // google
   private readonly googleClient: OAuth2Client;
 

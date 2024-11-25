@@ -205,16 +205,6 @@ export function DocAuth(options?: IDocAuthOptions) {
     });
   }
 
-  if (options?.apple) {
-    docs.push(ApiBearerAuth('apple'));
-    oneOfUnauthorized.push({
-      data: {},
-      success: false,
-      messagePath: 'auth.error.socialApple',
-      statusCode: ENUM_AUTH_STATUS_CODE_ERROR.SOCIAL_APPLE,
-    });
-  }
-
   return applyDecorators(
     ...docs,
     DocOneOf(HttpStatus.UNAUTHORIZED, ...oneOfUnauthorized)

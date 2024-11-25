@@ -18,6 +18,10 @@ export class UserService implements UserServiceInterface {
     return this.userRepository.findOneById(id);
   }
 
+  async findOneByEmail(email: string): Promise<UserEntity | null> {
+    return this.userRepository.findOneByEmail(email);
+  }
+
   async create(
     { email, name, gender }: UserCreateRequestDto,
     { passwordExpired, passwordHash, salt, passwordCreated }: IAuthPassword

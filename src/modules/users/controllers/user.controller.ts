@@ -1,9 +1,12 @@
 import {
+  BadRequestException,
   Body,
   ConflictException,
   Controller,
+  ForbiddenException,
   Inject,
   InternalServerErrorException,
+  NotFoundException,
   Post,
   Req,
   UploadedFile,
@@ -36,6 +39,8 @@ import {
   UserLoginCredentialDoc,
   UserLoginSocialGoogleDoc,
 } from '../docs/user.login.doc';
+import { ENUM_USER_STATUS } from '../enums/user.enum';
+import { AuthJwtAccessProtected } from '../../../core/auth/decorators/auth.jwt.decorator';
 
 @ApiTags('modules.user')
 @Controller()
@@ -108,13 +113,38 @@ export class UserController {
   async loginWithCredential(
     @Body() { email, password }: AuthLoginRequestDto,
     @Req() request: IRequestApp
-  ) {}
+  ) {
+    let user: UserEntity | null = await this.userService.findOneByEmail(email);
+    if (!user || !user.password) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'user.error.notFound',
+      });
+    }
+
+    const validate: boolean = await this.authService.validateUser(
+      password,
+      user.password
+    );
+    if (!validate) {
+      throw new BadRequestException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.PASSWORD_NOT_MATCH,
+        message: 'auth.error.passwordNotMatch',
+      });
+    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
+        message: 'user.error.inactive',
+      });
+    }
+  }
 
   @UserLoginSocialGoogleDoc()
   @Post('login/google')
   async loginWithGoogle() {}
 
-  @Post('/upload')
+  @AuthJwtAccessProtected()
+  @Post('avatar/upload')
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file: Express.Multer.File) {
     // console.log(file);
