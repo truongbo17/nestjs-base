@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from './config/config.type';
@@ -27,10 +27,10 @@ async function bootstrap() {
   // Logger
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
+  // Env
   process.env.NODE_ENV = configService.getOrThrow('app.appEnv', {
     infer: true,
   });
-
   process.env.TZ = configService.getOrThrow('app.timezone', { infer: true });
 
   // Compression
@@ -104,7 +104,6 @@ async function bootstrap() {
         { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
         'google'
       )
-      .addApiKey({ type: 'apiKey', in: 'header', name: 'x-api-key' }, 'xApiKey')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);

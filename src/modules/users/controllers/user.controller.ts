@@ -97,6 +97,12 @@ export class UserController {
     }
   }
 
+  @Post('login/credential')
+  async loginWithCredential() {}
+
+  @Post('login/google')
+  async loginWithGoogle() {}
+
   @Post('/upload')
   @UseInterceptors(FileInterceptor('file'))
   async upload(@UploadedFile() file: Express.Multer.File) {
