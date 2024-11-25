@@ -10,7 +10,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { UserRegisterDoc } from '../docs/user.user.doc';
 import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -30,6 +29,13 @@ import { UserEntity } from '../repositories/entities/user.entity';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ENUM_WORKER_QUEUES } from '../../../workers/enums/worker.enum';
+import { AuthLoginRequestDto } from '../../../core/auth/dtos/request/auth.login.request.dto';
+import { IRequestApp } from '../../../common/request/interfaces/request.interface';
+import { UserRegisterDoc } from '../docs/user.register.doc';
+import {
+  UserLoginCredentialDoc,
+  UserLoginSocialGoogleDoc,
+} from '../docs/user.login.doc';
 
 @ApiTags('modules.user')
 @Controller()
@@ -97,9 +103,14 @@ export class UserController {
     }
   }
 
+  @UserLoginCredentialDoc()
   @Post('login/credential')
-  async loginWithCredential() {}
+  async loginWithCredential(
+    @Body() { email, password }: AuthLoginRequestDto,
+    @Req() request: IRequestApp
+  ) {}
 
+  @UserLoginSocialGoogleDoc()
   @Post('login/google')
   async loginWithGoogle() {}
 

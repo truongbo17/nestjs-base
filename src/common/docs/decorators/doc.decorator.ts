@@ -1,19 +1,30 @@
 import {
+  IDocAuthOptions,
   IDocDefaultOptions,
+  IDocOfOptions,
   IDocOptions,
+  IDocRequestOptions,
   IDocResponseOptions,
 } from '../interfaces/doc.interface';
 import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiConsumes,
   ApiExtraModels,
   ApiHeaders,
   ApiOperation,
+  ApiParam,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   getSchemaPath,
 } from '@nestjs/swagger';
 import { ResponseDto } from '../../response/dtos/response.dto';
 import { applyDecorators, HttpStatus } from '@nestjs/common';
 import { ENUM_MESSAGE_LANGUAGE } from '../../i18n/enums/i18n.enum';
+import { ENUM_DOC_REQUEST_BODY_TYPE } from '../enums/doc.enum';
+import { APP_STATUS_CODE_ERROR } from '../../../core/app/enums/app.enum';
+import { ENUM_AUTH_STATUS_CODE_ERROR } from '../../../core/auth/enums/auth.status-code.enum';
 
 export default function DocDefault<T>(
   options: IDocDefaultOptions<T>
@@ -114,4 +125,239 @@ export function DocResponse<T = void>(
   }
 
   return applyDecorators(ApiProduces('application/json'), DocDefault(docs));
+}
+
+export function DocRequest(options?: IDocRequestOptions) {
+  const docs: Array<ClassDecorator | MethodDecorator> = [];
+
+  if (options?.bodyType === ENUM_DOC_REQUEST_BODY_TYPE.FORM_DATA) {
+    docs.push(ApiConsumes('multipart/form-data'));
+  } else if (options?.bodyType === ENUM_DOC_REQUEST_BODY_TYPE.TEXT) {
+    docs.push(ApiConsumes('text/plain'));
+  } else if (options?.bodyType === ENUM_DOC_REQUEST_BODY_TYPE.JSON) {
+    docs.push(ApiConsumes('application/json'));
+  }
+
+  if (options?.bodyType) {
+    docs.push(
+      DocDefault({
+        data: {},
+        success: false,
+        httpStatus: HttpStatus.UNPROCESSABLE_ENTITY,
+        statusCode: APP_STATUS_CODE_ERROR.APP_VALIDATION,
+        messagePath: 'request.validation',
+      })
+    );
+  }
+
+  if (options?.params) {
+    const params: MethodDecorator[] = options?.params?.map(param =>
+      ApiParam(param)
+    );
+    docs.push(...params);
+  }
+
+  if (options?.queries) {
+    const queries: MethodDecorator[] = options?.queries?.map(query =>
+      ApiQuery(query)
+    );
+    docs.push(...queries);
+  }
+
+  if (options?.dto) {
+    docs.push(ApiBody({ type: options?.dto }));
+  }
+
+  return applyDecorators(...docs);
+}
+
+export function DocAuth(options?: IDocAuthOptions) {
+  const docs: Array<ClassDecorator | MethodDecorator> = [];
+  const oneOfUnauthorized: IDocOfOptions[] = [];
+
+  if (options?.jwtRefreshToken) {
+    docs.push(ApiBearerAuth('refreshToken'));
+    oneOfUnauthorized.push({
+      data: {},
+      success: false,
+      messagePath: 'auth.error.refreshTokenUnauthorized',
+      statusCode: ENUM_AUTH_STATUS_CODE_ERROR.JWT_REFRESH_TOKEN,
+    });
+  }
+
+  if (options?.jwtAccessToken) {
+    docs.push(ApiBearerAuth('accessToken'));
+    oneOfUnauthorized.push({
+      data: {},
+      success: false,
+      messagePath: 'auth.error.accessTokenUnauthorized',
+      statusCode: ENUM_AUTH_STATUS_CODE_ERROR.JWT_ACCESS_TOKEN,
+    });
+  }
+
+  if (options?.google) {
+    docs.push(ApiBearerAuth('google'));
+    oneOfUnauthorized.push({
+      data: {},
+      success: false,
+      messagePath: 'auth.error.socialGoogle',
+      statusCode: ENUM_AUTH_STATUS_CODE_ERROR.SOCIAL_GOOGLE,
+    });
+  }
+
+  if (options?.apple) {
+    docs.push(ApiBearerAuth('apple'));
+    oneOfUnauthorized.push({
+      data: {},
+      success: false,
+      messagePath: 'auth.error.socialApple',
+      statusCode: ENUM_AUTH_STATUS_CODE_ERROR.SOCIAL_APPLE,
+    });
+  }
+
+  return applyDecorators(
+    ...docs,
+    DocOneOf(HttpStatus.UNAUTHORIZED, ...oneOfUnauthorized)
+  );
+}
+
+export function DocOneOf(
+  httpStatus: HttpStatus,
+  ...documents: IDocOfOptions[]
+): MethodDecorator {
+  const docs = [];
+  const oneOf = [];
+
+  for (const doc of documents) {
+    const oneOfSchema: Record<string, any> = {
+      allOf: [{ $ref: getSchemaPath(ResponseDto) }],
+      properties: {
+        message: {
+          example: doc.messagePath,
+        },
+        statusCode: {
+          type: 'number',
+          example: doc.statusCode ?? HttpStatus.OK,
+        },
+      },
+    };
+
+    if (doc.dto) {
+      docs.push(ApiExtraModels(doc.dto));
+      oneOfSchema.properties = {
+        ...oneOfSchema.properties,
+        data: {
+          $ref: getSchemaPath(doc.dto),
+        },
+      };
+    }
+
+    oneOf.push(oneOfSchema);
+  }
+
+  return applyDecorators(
+    ApiExtraModels(ResponseDto),
+    ApiResponse({
+      description: httpStatus.toString(),
+      status: httpStatus,
+      schema: {
+        oneOf,
+      },
+    }),
+    ...docs
+  );
+}
+
+export function DocAnyOf(
+  httpStatus: HttpStatus,
+  ...documents: IDocOfOptions[]
+): MethodDecorator {
+  const docs = [];
+  const anyOf = [];
+
+  for (const doc of documents) {
+    const anyOfSchema: Record<string, any> = {
+      allOf: [{ $ref: getSchemaPath(ResponseDto) }],
+      properties: {
+        message: {
+          example: doc.messagePath,
+        },
+        statusCode: {
+          type: 'number',
+          example: doc.statusCode ?? HttpStatus.OK,
+        },
+      },
+    };
+
+    if (doc.dto) {
+      docs.push(ApiExtraModels(doc.dto));
+      anyOfSchema.properties = {
+        ...anyOfSchema.properties,
+        data: {
+          $ref: getSchemaPath(doc.dto),
+        },
+      };
+    }
+
+    anyOf.push(anyOfSchema);
+  }
+
+  return applyDecorators(
+    ApiExtraModels(ResponseDto),
+    ApiResponse({
+      description: httpStatus.toString(),
+      status: httpStatus,
+      schema: {
+        anyOf,
+      },
+    }),
+    ...docs
+  );
+}
+
+export function DocAllOf(
+  httpStatus: HttpStatus,
+  ...documents: IDocOfOptions[]
+): MethodDecorator {
+  const docs = [];
+  const allOf = [];
+
+  for (const doc of documents) {
+    const allOfSchema: Record<string, any> = {
+      allOf: [{ $ref: getSchemaPath(ResponseDto) }],
+      properties: {
+        message: {
+          example: doc.messagePath,
+        },
+        statusCode: {
+          type: 'number',
+          example: doc.statusCode ?? HttpStatus.OK,
+        },
+      },
+    };
+
+    if (doc.dto) {
+      docs.push(ApiExtraModels(doc.dto));
+      allOfSchema.properties = {
+        ...allOfSchema.properties,
+        data: {
+          $ref: getSchemaPath(doc.dto),
+        },
+      };
+    }
+
+    allOf.push(allOfSchema);
+  }
+
+  return applyDecorators(
+    ApiExtraModels(ResponseDto),
+    ApiResponse({
+      description: httpStatus.toString(),
+      status: httpStatus,
+      schema: {
+        allOf,
+      },
+    }),
+    ...docs
+  );
 }

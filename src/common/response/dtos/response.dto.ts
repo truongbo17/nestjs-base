@@ -52,9 +52,9 @@ export class ResponseDto {
     description: 'Contain metadata about API',
     type: ResponseMetadataDto,
     example: {
-      language: 'en',
+      language: 'vi',
       timestamp: 1660190937231,
-      timezone: 'Asia/Dubai',
+      timezone: 'Asia/Ho_Chi_Minh',
       path: '/api/v1/test/hello',
       version: '1',
       repoVersion: '1.0.0',
