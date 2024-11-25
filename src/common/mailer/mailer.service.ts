@@ -31,6 +31,10 @@ export class MailerService {
     templatePath: string;
     context: Record<string, unknown>;
   }): Promise<void> {
+    if (!mailOptions.to) {
+      throw new Error('Recipient (to) must be specified.');
+    }
+
     let html: string | undefined;
     if (templatePath) {
       const template = await fs.readFile(templatePath, 'utf-8');

@@ -1,5 +1,6 @@
 import {
   Body,
+  ConflictException,
   Controller,
   Inject,
   InternalServerErrorException,
@@ -21,9 +22,15 @@ import { AuthService } from '../../../core/auth/services/auth.service';
 import { Request } from 'express';
 import { Response } from 'src/common/response/decorators/response.decorator';
 import { UserCreateResponseDto } from '../dtos/responses/user.create.response.dto';
-import dateHelper from '../../../utils/date.helper';
 import { AuthSignUpRequestDto } from '../../../core/auth/dtos/request/auth.sign-up.request.dto';
 import { IAuthPassword } from '../../../core/auth/interfaces/auth.interface';
+import { ENUM_USER_STATUS_CODE_ERROR } from '../enums/user.status-code.enum';
+import { APP_STATUS_CODE_ERROR } from '../../../core/app/enums/app.enum';
+import { UserEntity } from '../repositories/entities/user.entity';
+import { Queue } from 'bullmq';
+import { UserQueueEnum } from '../enums/user.queue';
+import { InjectQueue } from '@nestjs/bullmq';
+import { ENUM_WORKER_QUEUES } from '../../../workers/enums/worker.enum';
 
 @ApiTags('modules.user')
 @Controller()
@@ -33,26 +40,31 @@ export class UserController {
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly uploadService: UploaderService,
     private readonly userService: UserService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    @InjectQueue(ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE)
+    private readonly emailQueue: Queue
   ) {}
 
   @UserRegisterDoc()
   @Post('/register')
-  @Response('auth.signUp')
+  @Response('auth.register')
   async register(
     @Body() { email, name, gender, password }: AuthSignUpRequestDto,
     @Req() request: Request
   ): Promise<IResponse<UserCreateResponseDto>> {
-    try {
-      // const emailExist: boolean = await this.userService.existByEmail(email);
-      // console.log(emailExist);
+    const emailExist: boolean = await this.userService.existByEmail(email);
+    if (emailExist) {
+      throw new ConflictException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.EMAIL_EXIST,
+        message: 'user.error.emailExist',
+      });
+    }
 
+    try {
       const passwordHash: IAuthPassword =
         await this.authService.createPassword(password);
-      // throw new Error('a');
-      // console.log(emailExist);
 
-      const user = await this.userService.create(
+      const user: UserEntity = await this.userService.create(
         {
           email,
           name,
@@ -61,12 +73,25 @@ export class UserController {
         passwordHash
       );
 
+      await this.emailQueue.add(
+        UserQueueEnum.REGISTER,
+        {
+          send: { email, name },
+        },
+        {
+          debounce: {
+            id: `${UserQueueEnum.REGISTER}-${user.id}`,
+            ttl: 1000,
+          },
+        }
+      );
+
       return {
         data: user,
       };
     } catch (e) {
       throw new InternalServerErrorException({
-        statusCode: 1,
+        statusCode: APP_STATUS_CODE_ERROR.APP_ERROR,
         message: 'http.serverError.internalServerError',
         _error: e.message,
       });
