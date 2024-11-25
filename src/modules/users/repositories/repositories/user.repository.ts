@@ -16,7 +16,9 @@ export class UserRepository {
   }
 
   async exists(find: Record<string, any>): Promise<boolean> {
-    return this.usersRepository.exists(find);
+    return this.usersRepository.exists({
+      where: find,
+    });
   }
 
   async findOneById(id: number): Promise<UserEntity | null> {

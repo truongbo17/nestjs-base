@@ -42,7 +42,7 @@ export class EmailRegisterProcessor
 
   async processRegister(data: EmailSendDto): Promise<void> {
     const appName = this.configService.get('app.name', { infer: true });
-    const [subject] = await this.i18nLangService.tran('user.titleRegister');
+    const subject = this.i18nLangService.setMessage('user.titleRegister');
 
     return await this.mailerService.sendMail({
       to: data.email,

@@ -39,7 +39,7 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
             name: 'gender',
             type: 'enum',
             enum: Object.values(ENUM_USER_GENDER),
-            default: ENUM_USER_GENDER.MALE,
+            default: `'${ENUM_USER_GENDER.MALE}'`,
             isNullable: false,
           },
           {
@@ -51,7 +51,7 @@ export class CreateTableUsers1732011345467 implements MigrationInterface {
             name: 'status',
             type: 'enum',
             enum: Object.values(ENUM_USER_STATUS),
-            default: ENUM_USER_STATUS.ACTIVE,
+            default: `'${ENUM_USER_STATUS.ACTIVE}'`,
             isNullable: false,
           },
           {
