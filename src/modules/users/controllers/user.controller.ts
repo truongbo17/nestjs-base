@@ -68,6 +68,7 @@ import { UserMeResponseDto } from '../dtos/responses/user.me.response.dto';
 import { UserUpdateResponseDto } from '../dtos/responses/user.update.response.dto';
 import { UserUpdateDoc } from '../docs/user.update.doc';
 import { UserUpdateRequestDto } from '../dtos/requests/user.update.request.dto';
+import { ENUM_STORAGE } from '../../../common/files/enums/file.enum';
 
 @ApiTags('modules.user')
 @Controller()
@@ -237,18 +238,7 @@ export class UserController {
     @AuthJwtPayload<AuthJwtAccessPayloadDto>()
     { id }: AuthJwtAccessPayloadDto
   ) {
-    let user: UserEntity | null = await this.userService.findOneById(id);
-    if (!user) {
-      throw new NotFoundException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
-        message: 'user.error.notFound',
-      });
-    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
-      throw new ForbiddenException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
-        message: 'user.error.inactive',
-      });
-    }
+    let user: UserEntity | null = await this.userService.activeUser(id);
 
     const matchPassword: boolean = await this.authService.validateUser(
       body.oldPassword,
@@ -306,18 +296,7 @@ export class UserController {
       });
     }
 
-    const user: UserEntity | null = await this.userService.findOneById(id);
-    if (!user) {
-      throw new NotFoundException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
-        message: 'user.error.notFound',
-      });
-    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
-      throw new ForbiddenException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
-        message: 'user.error.inactive',
-      });
-    }
+    const user: UserEntity | null = await this.userService.activeUser(id);
 
     const token: AuthLoginResponseDto = await this.authService.refreshToken(
       user,
@@ -336,19 +315,7 @@ export class UserController {
   async me(
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
   ): Promise<IResponse<UserMeResponseDto>> {
-    const user: UserEntity | null = await this.userService.findOneById(id);
-
-    if (!user) {
-      throw new NotFoundException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
-        message: 'user.error.notFound',
-      });
-    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
-      throw new ForbiddenException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
-        message: 'user.error.inactive',
-      });
-    }
+    const user: UserEntity | null = await this.userService.activeUser(id);
 
     return {
       data: user,
@@ -363,19 +330,7 @@ export class UserController {
     @Body() data: UserUpdateRequestDto,
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
   ): Promise<IResponse<UserUpdateResponseDto>> {
-    let user: UserEntity | null = await this.userService.findOneById(id);
-
-    if (!user) {
-      throw new NotFoundException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
-        message: 'user.error.notFound',
-      });
-    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
-      throw new ForbiddenException({
-        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
-        message: 'user.error.inactive',
-      });
-    }
+    let user: UserEntity | null = await this.userService.activeUser(id);
 
     user = await this.userService.update(user, data);
 
@@ -386,14 +341,14 @@ export class UserController {
 
   @UserUploadAvatarDoc()
   @AuthJwtAccessProtected()
+  @Response('user.uploadPhotoProfile')
   @Post('avatar/upload')
   @UseInterceptors(FileInterceptor('file'))
   async upload(
     @UploadedFile() file: Express.Multer.File,
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
   ) {
-    console.log(id);
-    // console.log(file);
-    console.log(await this.uploadService.upload(file, 's3'));
+    const user = this.userService.activeUser(id);
+    console.log(await this.uploadService.upload(file, ENUM_STORAGE.LOCAL));
   }
 }
