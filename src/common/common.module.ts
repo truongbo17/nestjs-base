@@ -17,6 +17,7 @@ import { CacheModule } from './cache/cache.module';
 import { QueueModule } from './queue/queue.module';
 import { FileModule } from './files/file.module';
 import authConfig from '../config/auth.config';
+import { RequestModule } from './request/request.module';
 
 @Module({
   controllers: [],
@@ -51,6 +52,8 @@ import authConfig from '../config/auth.config';
     CacheModule,
     // File
     FileModule,
+    // Request
+    RequestModule.forRoot(),
   ],
 })
 export class CommonModule {}
