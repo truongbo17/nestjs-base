@@ -5,6 +5,7 @@ import * as path from 'node:path';
 import { HeaderResolver, I18nModule } from 'nestjs-i18n';
 import { I18nLangService } from './services/i18n-lang.service';
 import { ENUM_MESSAGE_LANGUAGE } from './enums/i18n.enum';
+import { IsPasswordConstraint } from '../request/validations/request.is-password.validation';
 
 @Global()
 @Module({})
@@ -49,7 +50,7 @@ export class I18nLangModule {
           inject: [ConfigService],
         }),
       ],
-      providers: [I18nLangService],
+      providers: [I18nLangService, IsPasswordConstraint],
       exports: [I18nLangService],
     };
   }

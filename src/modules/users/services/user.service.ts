@@ -35,4 +35,13 @@ export class UserService implements UserServiceInterface {
 
     return this.userRepository.create(user);
   }
+
+  async updatePassword(
+    user: UserEntity,
+    { passwordExpired, passwordHash, salt, passwordCreated }: IAuthPassword
+  ) {
+    user.password = passwordHash;
+
+    return this.userRepository.save(user);
+  }
 }

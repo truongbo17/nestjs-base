@@ -36,4 +36,8 @@ export class UserRepository {
   async findOneByEmail(email: string): Promise<UserEntity | null> {
     return this.usersRepository.findOneBy({ email: email });
   }
+
+  async save(user: UserEntity): Promise<UserEntity> {
+    return this.usersRepository.save(user);
+  }
 }

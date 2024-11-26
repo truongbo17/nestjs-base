@@ -7,6 +7,7 @@ import {
   Inject,
   InternalServerErrorException,
   NotFoundException,
+  Patch,
   Post,
   Req,
   UnauthorizedException,
@@ -59,6 +60,8 @@ import { AuthJwtRefreshPayloadDto } from '../../../core/auth/dtos/jwt/auth.jwt.r
 import { AuthRefreshResponseDto } from '../../../core/auth/dtos/response/auth.refresh.response.dto';
 import { ENUM_SESSION_STATUS_CODE_ERROR } from '../../session/enums/session.status-code.enum';
 import { AuthJwtAccessPayloadDto } from '../../../core/auth/dtos/jwt/auth.jwt.access-payload.dto';
+import { AuthChangePasswordRequestDto } from '../../../core/auth/dtos/request/auth.change-password.request.dto';
+import { DataSource, QueryRunner } from 'typeorm';
 
 @ApiTags('modules.user')
 @Controller()
@@ -71,7 +74,8 @@ export class UserController {
     private readonly authService: AuthService,
     @InjectQueue(ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE)
     private readonly emailQueue: Queue,
-    private readonly sessionService: SessionService
+    private readonly sessionService: SessionService,
+    private readonly dataSource: DataSource
   ) {}
 
   @UserRegisterDoc()
@@ -135,7 +139,7 @@ export class UserController {
   ): Promise<IResponse<AuthLoginResponseDto>> {
     const user: UserEntity | null =
       await this.userService.findOneByEmail(email);
-    if (!user || !user.password) {
+    if (!user) {
       throw new NotFoundException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
         message: 'user.error.notFound',
@@ -144,7 +148,7 @@ export class UserController {
 
     const validate: boolean = await this.authService.validateUser(
       password,
-      user.password
+      user.password || ''
     );
     if (!validate) {
       throw new BadRequestException({
@@ -217,6 +221,64 @@ export class UserController {
     return {
       data: token,
     };
+  }
+
+  @Response('auth.changePassword')
+  @AuthJwtAccessProtected()
+  @Patch('/change-password')
+  async changePassword(
+    @Body() body: AuthChangePasswordRequestDto,
+    @AuthJwtPayload<AuthJwtAccessPayloadDto>()
+    { id }: AuthJwtAccessPayloadDto
+  ) {
+    let user: UserEntity | null = await this.userService.findOneById(id);
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'user.error.notFound',
+      });
+    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
+        message: 'user.error.inactive',
+      });
+    }
+
+    const matchPassword: boolean = await this.authService.validateUser(
+      body.oldPassword,
+      user.password || ''
+    );
+    if (!matchPassword) {
+      throw new BadRequestException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.PASSWORD_NOT_MATCH,
+        message: 'auth.error.passwordNotMatch',
+      });
+    }
+
+    const password: IAuthPassword = await this.authService.createPassword(
+      body.newPassword
+    );
+
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
+
+    try {
+      await queryRunner.startTransaction();
+
+      user = await this.userService.updatePassword(user, password);
+
+      await this.sessionService.deleteByUser(user.id);
+      await queryRunner.commitTransaction();
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+
+      throw new InternalServerErrorException({
+        statusCode: APP_STATUS_CODE_ERROR.APP_ERROR,
+        message: 'http.serverError.internalServerError',
+        _error: e.message,
+      });
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   @UserRefreshTokenDoc()

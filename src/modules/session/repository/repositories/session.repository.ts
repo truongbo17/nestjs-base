@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { SessionEntity } from '../entities/session.entity';
 import { UserEntity } from '../../../users/repository/entities/user.entity';
@@ -27,5 +27,13 @@ export class SessionRepository {
     user: UserEntity
   ): Promise<SessionEntity | null> {
     return this.sessionRepository.findOneBy({ id: id, user: user });
+  }
+
+  async deleteByUserId(id: number): Promise<DeleteResult> {
+    return this.sessionRepository.softDelete({
+      user: {
+        id: id,
+      },
+    });
   }
 }

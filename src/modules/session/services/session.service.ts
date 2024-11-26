@@ -23,4 +23,8 @@ export class SessionService implements SessionServiceInterface {
   async create(data: SessionCreateRequestDto): Promise<SessionEntity> {
     return this.sessionRepository.create(data);
   }
+
+  async deleteByUser(userId: number) {
+    return this.sessionRepository.deleteByUserId(userId);
+  }
 }

@@ -85,7 +85,7 @@ export class AppHttpFilter implements ExceptionFilter {
       const { _metadata } = responseException;
 
       statusCode = responseException.statusCode;
-      messagePath = responseException.message;
+      messagePath = responseException.message ?? `http.${statusHttp}`;
       data = responseException?.data || {};
       messageProperties = _metadata?.customProperty?.messageProperties;
       delete _metadata?.customProperty;
