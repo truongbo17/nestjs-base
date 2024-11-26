@@ -9,6 +9,7 @@ import {
   NotFoundException,
   Post,
   Req,
+  UnauthorizedException,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -33,7 +34,6 @@ import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ENUM_WORKER_QUEUES } from '../../../workers/enums/worker.enum';
 import { AuthLoginRequestDto } from '../../../core/auth/dtos/request/auth.login.request.dto';
-import { IRequestApp } from '../../../common/request/interfaces/request.interface';
 import { UserRegisterDoc } from '../docs/user.register.doc';
 import {
   UserLoginCredentialDoc,
@@ -43,6 +43,8 @@ import { ENUM_USER_STATUS } from '../enums/user.enum';
 import {
   AuthJwtAccessProtected,
   AuthJwtPayload,
+  AuthJwtRefreshProtected,
+  AuthJwtToken,
 } from '../../../core/auth/decorators/auth.jwt.decorator';
 import { UserUploadAvatarDoc } from '../docs/user.upload-avatar.doc';
 import { SessionService } from '../../session/services/session.service';
@@ -51,6 +53,12 @@ import { randomStringGenerator } from '@nestjs/common/utils/random-string-genera
 import { SessionEntity } from '../../session/repository/entities/session.entity';
 import { AuthSocialGoogleProtected } from '../../../core/auth/decorators/auth.social.decorator';
 import { AuthSocialGooglePayloadDto } from '../../../core/auth/dtos/social/auth.social.google-payload.dto';
+import { AuthLoginResponseDto } from '../../../core/auth/dtos/response/auth.login.response.dto';
+import { UserRefreshTokenDoc } from '../docs/user.refresh-token.doc';
+import { AuthJwtRefreshPayloadDto } from '../../../core/auth/dtos/jwt/auth.jwt.refresh-payload.dto';
+import { AuthRefreshResponseDto } from '../../../core/auth/dtos/response/auth.refresh.response.dto';
+import { ENUM_SESSION_STATUS_CODE_ERROR } from '../../session/enums/session.status-code.enum';
+import { AuthJwtAccessPayloadDto } from '../../../core/auth/dtos/jwt/auth.jwt.access-payload.dto';
 
 @ApiTags('modules.user')
 @Controller()
@@ -123,9 +131,8 @@ export class UserController {
   @Post('login/credential')
   @Response('auth.loginWithCredential')
   async loginWithCredential(
-    @Body() { email, password }: AuthLoginRequestDto,
-    @Req() request: IRequestApp
-  ) {
+    @Body() { email, password }: AuthLoginRequestDto
+  ): Promise<IResponse<AuthLoginResponseDto>> {
     const user: UserEntity | null =
       await this.userService.findOneByEmail(email);
     if (!user || !user.password) {
@@ -161,7 +168,10 @@ export class UserController {
       hash: hash,
     });
 
-    const token = await this.authService.createToken(user, session.id);
+    const token: AuthLoginResponseDto = await this.authService.createToken(
+      user,
+      session.id
+    );
 
     return {
       data: token,
@@ -174,9 +184,8 @@ export class UserController {
   @Post('login/google')
   async loginWithGoogle(
     @AuthJwtPayload<AuthSocialGooglePayloadDto>()
-    { email }: AuthSocialGooglePayloadDto,
-    @Req() request: IRequestApp
-  ) {
+    { email }: AuthSocialGooglePayloadDto
+  ): Promise<IResponse<AuthLoginResponseDto>> {
     const user = await this.userService.findOneByEmail(email);
     if (!user) {
       throw new NotFoundException({
@@ -200,7 +209,52 @@ export class UserController {
       hash: hash,
     });
 
-    const token = await this.authService.createToken(user, session.id);
+    const token: AuthLoginResponseDto = await this.authService.createToken(
+      user,
+      session.id
+    );
+
+    return {
+      data: token,
+    };
+  }
+
+  @UserRefreshTokenDoc()
+  @Response('auth.refresh')
+  @AuthJwtRefreshProtected()
+  @Post('refresh')
+  async refresh(
+    @AuthJwtToken() refreshToken: string,
+    @AuthJwtPayload<AuthJwtRefreshPayloadDto>()
+    { id, session }: AuthJwtRefreshPayloadDto
+  ): Promise<IResponse<AuthRefreshResponseDto>> {
+    const sessionActive: Promise<SessionEntity | null> =
+      this.sessionService.findById(session);
+
+    if (!sessionActive) {
+      throw new UnauthorizedException({
+        statusCode: ENUM_SESSION_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'session.error.notFound',
+      });
+    }
+
+    const user: UserEntity | null = await this.userService.findOneById(id);
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'user.error.notFound',
+      });
+    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
+        message: 'user.error.inactive',
+      });
+    }
+
+    const token: AuthLoginResponseDto = await this.authService.refreshToken(
+      user,
+      refreshToken
+    );
 
     return {
       data: token,
@@ -211,7 +265,11 @@ export class UserController {
   @AuthJwtAccessProtected()
   @Post('avatar/upload')
   @UseInterceptors(FileInterceptor('file'))
-  async upload(@UploadedFile() file: Express.Multer.File) {
+  async upload(
+    @UploadedFile() file: Express.Multer.File,
+    @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
+  ) {
+    console.log(id);
     // console.log(file);
     console.log(await this.uploadService.upload(file, 's3'));
   }

@@ -3,6 +3,7 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '../entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EntityRelational } from '../../../../common/database/relation/entities/relational-entity-helper';
+import { ENUM_USER_STATUS } from '../../enums/user.enum';
 
 @Injectable()
 export class UserRepository {
@@ -23,6 +24,13 @@ export class UserRepository {
 
   async findOneById(id: number): Promise<UserEntity | null> {
     return this.usersRepository.findOneBy({ id: id });
+  }
+
+  async findOneByIdWithActive(id: number): Promise<UserEntity | null> {
+    return this.usersRepository.findOneBy({
+      id: id,
+      status: ENUM_USER_STATUS.ACTIVE,
+    });
   }
 
   async findOneByEmail(email: string): Promise<UserEntity | null> {

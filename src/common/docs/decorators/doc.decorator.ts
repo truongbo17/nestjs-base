@@ -222,6 +222,9 @@ export function DocOneOf(
     const oneOfSchema: Record<string, any> = {
       allOf: [{ $ref: getSchemaPath(ResponseDto) }],
       properties: {
+        data: {
+          example: {},
+        },
         message: {
           example: doc.messagePath,
         },
@@ -269,6 +272,9 @@ export function DocAnyOf(
     const anyOfSchema: Record<string, any> = {
       allOf: [{ $ref: getSchemaPath(ResponseDto) }],
       properties: {
+        data: {
+          example: {},
+        },
         message: {
           example: doc.messagePath,
         },
@@ -316,6 +322,9 @@ export function DocAllOf(
     const allOfSchema: Record<string, any> = {
       allOf: [{ $ref: getSchemaPath(ResponseDto) }],
       properties: {
+        data: {
+          example: {},
+        },
         message: {
           example: doc.messagePath,
         },
