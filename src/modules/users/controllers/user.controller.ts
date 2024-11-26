@@ -40,12 +40,17 @@ import {
   UserLoginSocialGoogleDoc,
 } from '../docs/user.login.doc';
 import { ENUM_USER_STATUS } from '../enums/user.enum';
-import { AuthJwtAccessProtected } from '../../../core/auth/decorators/auth.jwt.decorator';
+import {
+  AuthJwtAccessProtected,
+  AuthJwtPayload,
+} from '../../../core/auth/decorators/auth.jwt.decorator';
 import { UserUploadAvatarDoc } from '../docs/user.upload-avatar.doc';
 import { SessionService } from '../../session/services/session.service';
 import crypto from 'crypto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { SessionEntity } from '../../session/repository/entities/session.entity';
+import { AuthSocialGoogleProtected } from '../../../core/auth/decorators/auth.social.decorator';
+import { AuthSocialGooglePayloadDto } from '../../../core/auth/dtos/social/auth.social.google-payload.dto';
 
 @ApiTags('modules.user')
 @Controller()
@@ -121,7 +126,7 @@ export class UserController {
     @Body() { email, password }: AuthLoginRequestDto,
     @Req() request: IRequestApp
   ) {
-    let user: UserEntity | null = await this.userService.findOneByEmail(email);
+    const user: UserEntity | null = await this.userService.findOneByEmail(email);
     if (!user || !user.password) {
       throw new NotFoundException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
@@ -163,8 +168,16 @@ export class UserController {
   }
 
   @UserLoginSocialGoogleDoc()
+  @AuthSocialGoogleProtected()
+  @Response('auth.loginWithSocialGoogle')
   @Post('login/google')
-  async loginWithGoogle() {}
+  async loginWithGoogle(
+    @AuthJwtPayload<AuthSocialGooglePayloadDto>()
+    { email }: AuthSocialGooglePayloadDto,
+    @Req() request: IRequestApp
+  ) {
+    console.log(email);
+  }
 
   @UserUploadAvatarDoc()
   @AuthJwtAccessProtected()

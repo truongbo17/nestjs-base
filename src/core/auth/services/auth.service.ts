@@ -303,6 +303,9 @@ export class AuthService implements IAuthService {
   ): Promise<AuthSocialGooglePayloadDto> {
     const login: LoginTicket = await this.googleClient.verifyIdToken({
       idToken: idToken,
+      audience: [
+        this.configService.getOrThrow('auth.google.clientId', { infer: true }),
+      ],
     });
     const payload: TokenPayload | undefined = login.getPayload();
 

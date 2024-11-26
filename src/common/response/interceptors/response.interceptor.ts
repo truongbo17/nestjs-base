@@ -55,7 +55,7 @@ export class ResponseInterceptor
             RESPONSE_MESSAGE_PATH_META_KEY,
             context.getHandler()
           );
-          let success: boolean = this.reflector.get<boolean>(
+          const success: boolean = this.reflector.get<boolean>(
             RESPONSE_SUCCESS_META_KEY,
             context.getHandler()
           );
