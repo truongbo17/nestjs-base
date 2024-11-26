@@ -26,14 +26,6 @@ export class DatabaseDto {
   })
   updatedAt: Date | null;
 
-  @ApiProperty({
-    description: 'Date deleted at',
-    example: faker.date.recent(),
-    required: false,
-    nullable: true,
-  })
-  deletedAt: Date | null;
-
   @ApiHideProperty()
   @Exclude()
   __v?: string;
