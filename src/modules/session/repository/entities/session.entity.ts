@@ -1,11 +1,12 @@
 import {
+  Column,
   CreateDateColumn,
+  DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  DeleteDateColumn,
-  Column,
   UpdateDateColumn,
 } from 'typeorm';
 import { EntityRelational } from '../../../../common/database/relation/entities/relational-entity-helper';
@@ -21,6 +22,7 @@ export class SessionEntity extends EntityRelational {
   @ManyToOne(() => UserEntity, {
     eager: true,
   })
+  @JoinColumn({ name: 'user_id' })
   @Index()
   user: UserEntity;
 

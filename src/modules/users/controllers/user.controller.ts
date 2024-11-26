@@ -116,7 +116,7 @@ export class UserController {
 
   @UserLoginCredentialDoc()
   @Post('login/credential')
-  @Response('auth.login_credential')
+  @Response('auth.loginWithCredential')
   async loginWithCredential(
     @Body() { email, password }: AuthLoginRequestDto,
     @Req() request: IRequestApp
