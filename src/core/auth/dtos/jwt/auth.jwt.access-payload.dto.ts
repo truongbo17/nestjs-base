@@ -34,10 +34,4 @@ export class AuthJwtAccessPayloadDto {
     nullable: false,
   })
   email: string;
-
-  @ApiProperty({
-    required: true,
-    nullable: false,
-  })
-  role: string;
 }

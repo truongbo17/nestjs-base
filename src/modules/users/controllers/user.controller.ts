@@ -41,6 +41,7 @@ import {
 } from '../docs/user.login.doc';
 import { ENUM_USER_STATUS } from '../enums/user.enum';
 import { AuthJwtAccessProtected } from '../../../core/auth/decorators/auth.jwt.decorator';
+import { UserUploadAvatarDoc } from '../docs/user.upload-avatar.doc';
 
 @ApiTags('modules.user')
 @Controller()
@@ -143,6 +144,7 @@ export class UserController {
   @Post('login/google')
   async loginWithGoogle() {}
 
+  @UserUploadAvatarDoc()
   @AuthJwtAccessProtected()
   @Post('avatar/upload')
   @UseInterceptors(FileInterceptor('file'))

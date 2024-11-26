@@ -11,7 +11,7 @@ import { ENUM_WORKER_QUEUES } from '../../workers/enums/worker.enum';
   providers: [UserService],
   exports: [UserService],
   imports: [
-    AuthModule,
+    AuthModule.forRoot(),
     UserRepositoryModule,
     BullModule.registerQueueAsync({
       name: ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE,

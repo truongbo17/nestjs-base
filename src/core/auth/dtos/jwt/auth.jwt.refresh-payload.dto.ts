@@ -3,5 +3,5 @@ import { AuthJwtAccessPayloadDto } from './auth.jwt.access-payload.dto';
 
 export class AuthJwtRefreshPayloadDto extends OmitType(
   AuthJwtAccessPayloadDto,
-  ['role', 'email'] as const
+  ['email'] as const
 ) {}

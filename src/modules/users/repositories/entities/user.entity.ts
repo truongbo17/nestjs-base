@@ -8,6 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { EntityRelational } from '../../../../common/database/relation/entities/relational-entity-helper';
+import { ENUM_USER_GENDER, ENUM_USER_STATUS } from '../../enums/user.enum';
 
 @Entity({
   name: 'users',
@@ -27,13 +28,13 @@ export class UserEntity extends EntityRelational {
   name: string;
 
   @Column({ type: String, nullable: false })
-  status: string;
+  status: ENUM_USER_STATUS;
 
   @Column({ type: String, nullable: false })
-  gender: string;
+  gender: ENUM_USER_GENDER;
 
-  @Column({ type: String, nullable: false })
-  avatar: string;
+  @Column({ type: Number, nullable: false })
+  avatar: number;
 
   @CreateDateColumn()
   createdAt: Date;
