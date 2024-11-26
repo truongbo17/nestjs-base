@@ -67,6 +67,7 @@ import { UserMeDoc } from '../docs/user.me.doc';
 import { UserMeResponseDto } from '../dtos/responses/user.me.response.dto';
 import { UserUpdateResponseDto } from '../dtos/responses/user.update.response.dto';
 import { UserUpdateDoc } from '../docs/user.update.doc';
+import { UserUpdateRequestDto } from '../dtos/requests/user.update.request.dto';
 
 @ApiTags('modules.user')
 @Controller()
@@ -359,8 +360,29 @@ export class UserController {
   @AuthJwtAccessProtected()
   @Put('/update')
   async update(
-    @Body() { email, name, gender }: AuthSignUpRequestDto
-  ): Promise<IResponse<UserUpdateResponseDto>> {}
+    @Body() data: UserUpdateRequestDto,
+    @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
+  ): Promise<IResponse<UserUpdateResponseDto>> {
+    let user: UserEntity | null = await this.userService.findOneById(id);
+
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'user.error.notFound',
+      });
+    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
+        message: 'user.error.inactive',
+      });
+    }
+
+    user = await this.userService.update(user, data);
+
+    return {
+      data: user,
+    };
+  }
 
   @UserUploadAvatarDoc()
   @AuthJwtAccessProtected()

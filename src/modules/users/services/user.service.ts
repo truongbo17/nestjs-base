@@ -5,6 +5,7 @@ import { UserEntity } from '../repository/entities/user.entity';
 import { ENUM_USER_STATUS } from '../enums/user.enum';
 import { UserRepository } from '../repository/repositories/user.repository';
 import { UserCreateRequestDto } from '../dtos/requests/user.create.request.dto';
+import { UserUpdateRequestDto } from '../dtos/requests/user.update.request.dto';
 
 @Injectable()
 export class UserService implements UserServiceInterface {
@@ -41,6 +42,16 @@ export class UserService implements UserServiceInterface {
     { passwordExpired, passwordHash, salt, passwordCreated }: IAuthPassword
   ) {
     user.password = passwordHash;
+
+    return this.userRepository.save(user);
+  }
+
+  async update(
+    user: UserEntity,
+    { gender, name }: UserUpdateRequestDto
+  ): Promise<UserEntity> {
+    user.gender = gender;
+    user.name = name;
 
     return this.userRepository.save(user);
   }
