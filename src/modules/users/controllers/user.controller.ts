@@ -126,7 +126,8 @@ export class UserController {
     @Body() { email, password }: AuthLoginRequestDto,
     @Req() request: IRequestApp
   ) {
-    const user: UserEntity | null = await this.userService.findOneByEmail(email);
+    const user: UserEntity | null =
+      await this.userService.findOneByEmail(email);
     if (!user || !user.password) {
       throw new NotFoundException({
         statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
@@ -176,7 +177,34 @@ export class UserController {
     { email }: AuthSocialGooglePayloadDto,
     @Req() request: IRequestApp
   ) {
-    console.log(email);
+    const user = await this.userService.findOneByEmail(email);
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'user.error.notFound',
+      });
+    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
+        message: 'user.error.inactive',
+      });
+    }
+
+    const hash: string = crypto
+      .createHash('sha256')
+      .update(randomStringGenerator())
+      .digest('hex');
+
+    const session: SessionEntity = await this.sessionService.create({
+      user_id: user.id,
+      hash: hash,
+    });
+
+    const token = await this.authService.createToken(user, session.id);
+
+    return {
+      data: token,
+    };
   }
 
   @UserUploadAvatarDoc()
