@@ -12,7 +12,7 @@ export function UserUploadAvatarDoc(): MethodDecorator {
       summary: 'Upload avatar user',
     }),
     DocAuth({ jwtAccessToken: true }),
-    DocRequestFile({ fieldName: 'test' }),
+    DocRequestFile({ fieldName: 'file' }),
     DocResponse('user.uploadPhotoProfile')
   );
 }

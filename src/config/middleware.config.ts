@@ -16,16 +16,16 @@ export default registerAs<MiddlewareConfigType>('middleware', () => {
   return {
     body: {
       json: {
-        maxFileSize: bytes('100kb'), // 100kb
+        maxFileSize: bytes('1000kb'), // 100kb
       },
       raw: {
-        maxFileSize: bytes('100kb'), // 100kb
+        maxFileSize: bytes('1000kb'), // 100kb
       },
       text: {
-        maxFileSize: bytes('100kb'), // 100kb
+        maxFileSize: bytes('1000kb'), // 100kb
       },
       urlencoded: {
-        maxFileSize: bytes('100kb'), // 100kb
+        maxFileSize: bytes('1000kb'), // 100kb
       },
     },
     timeout: ms('30s'), // 30s based on ms module

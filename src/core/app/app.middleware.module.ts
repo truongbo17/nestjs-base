@@ -1,5 +1,4 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { RequestLoggerMiddleware } from './middlewares/request-logger.middleware';
 import { APP_FILTER } from '@nestjs/core';
 import { AppGeneralFilter } from './filters/app.general.filter';
 import { AppHttpFilter } from './filters/app.http.filter';
@@ -9,6 +8,7 @@ import {
   AppRawBodyParserMiddleware,
   AppTextBodyParserMiddleware,
   AppUrlencodedBodyParserMiddleware,
+  FileUploadLimitMiddleware,
 } from './middlewares/app.body-parser.middleware';
 import { AppCorsMiddleware } from './middlewares/app.cors.middleware';
 import { AppCustomLanguageMiddleware } from './middlewares/app.custom-language.middleware';
@@ -50,6 +50,7 @@ export class AppMiddlewareModule implements NestModule {
         AppRequestIdMiddleware,
         AppResponseTimeMiddleware,
         AppUrlVersionMiddleware
+        // FileUploadLimitMiddleware
       )
       .forRoutes('*');
   }

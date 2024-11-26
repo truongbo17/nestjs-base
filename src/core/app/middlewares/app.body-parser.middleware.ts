@@ -1,7 +1,12 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  PayloadTooLargeException,
+} from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import { ConfigService } from '@nestjs/config';
+import multer from 'multer';
 
 @Injectable()
 export class AppUrlencodedBodyParserMiddleware implements NestMiddleware {
@@ -73,5 +78,34 @@ export class AppTextBodyParserMiddleware implements NestMiddleware {
     bodyParser.text({
       limit: this.maxFile,
     })(req, res, next);
+  }
+}
+
+@Injectable()
+export class FileUploadLimitMiddleware implements NestMiddleware {
+  private readonly maxFileSize: number;
+
+  constructor(private readonly configService: ConfigService) {
+    this.maxFileSize = this.configService.get<number>('file.maxFileSize', {
+      infer: true,
+    });
+  }
+
+  use(req: Request, res: Response, next: NextFunction): void {
+    const upload = multer({
+      limits: { fileSize: this.maxFileSize },
+    }).any();
+
+    upload(req, res, err => {
+      if (err) {
+        if (err.code === 'LIMIT_FILE_SIZE') {
+          throw new PayloadTooLargeException(
+            'File size exceeds the maximum allowed limit'
+          );
+        }
+        throw err;
+      }
+      next();
+    });
   }
 }
