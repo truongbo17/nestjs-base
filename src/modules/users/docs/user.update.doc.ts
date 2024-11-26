@@ -6,18 +6,18 @@ import {
   DocResponse,
 } from '../../../common/docs/decorators/doc.decorator';
 import { ENUM_DOC_REQUEST_BODY_TYPE } from '../../../common/docs/enums/doc.enum';
-import { AuthChangePasswordRequestDto } from '../../../core/auth/dtos/request/auth.change-password.request.dto';
+import { UserUpdateRequestDto } from '../dtos/requests/user.update.request.dto';
 
 export function UserUpdateDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
-      summary: 'User change password',
+      summary: 'User update info',
     }),
     DocAuth({ jwtAccessToken: true }),
     DocRequest({
       bodyType: ENUM_DOC_REQUEST_BODY_TYPE.JSON,
-      dto: AuthChangePasswordRequestDto,
+      dto: UserUpdateRequestDto,
     }),
-    DocResponse('auth.changePassword')
+    DocResponse('auth.updateInfo')
   );
 }
