@@ -62,6 +62,7 @@ import { ENUM_SESSION_STATUS_CODE_ERROR } from '../../session/enums/session.stat
 import { AuthJwtAccessPayloadDto } from '../../../core/auth/dtos/jwt/auth.jwt.access-payload.dto';
 import { AuthChangePasswordRequestDto } from '../../../core/auth/dtos/request/auth.change-password.request.dto';
 import { DataSource, QueryRunner } from 'typeorm';
+import { UserChangePassDoc } from '../docs/user.change-pass.doc';
 
 @ApiTags('modules.user')
 @Controller()
@@ -223,6 +224,7 @@ export class UserController {
     };
   }
 
+  @UserChangePassDoc()
   @Response('auth.changePassword')
   @AuthJwtAccessProtected()
   @Patch('/change-password')

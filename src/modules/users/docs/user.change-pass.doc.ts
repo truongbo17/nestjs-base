@@ -8,7 +8,7 @@ import {
 import { ENUM_DOC_REQUEST_BODY_TYPE } from '../../../common/docs/enums/doc.enum';
 import { AuthChangePasswordRequestDto } from '../../../core/auth/dtos/request/auth.change-password.request.dto';
 
-export function UserUploadAvatarDoc(): MethodDecorator {
+export function UserChangePassDoc(): MethodDecorator {
   return applyDecorators(
     Doc({
       summary: 'User change password',

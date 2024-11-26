@@ -95,7 +95,7 @@ export class ResponseInterceptor
           // response
           const responseData = (await res) as ResponseInterceptorInterface;
 
-          if (responseData.data) {
+          if (responseData?.data) {
             const { _metadata } = responseData;
 
             data = responseData.data;
