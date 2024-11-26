@@ -4,12 +4,13 @@ import {
   ConflictException,
   Controller,
   ForbiddenException,
+  Get,
   Inject,
   InternalServerErrorException,
   NotFoundException,
   Patch,
   Post,
-  Req,
+  Put,
   UnauthorizedException,
   UploadedFile,
   UseInterceptors,
@@ -23,7 +24,6 @@ import { UploaderService } from '../../../common/files/services/uploader/upload.
 import { IResponse } from '../../../common/response/interfaces/response.interface';
 import { UserService } from '../services/user.service';
 import { AuthService } from '../../../core/auth/services/auth.service';
-import { Request } from 'express';
 import { Response } from 'src/common/response/decorators/response.decorator';
 import { UserCreateResponseDto } from '../dtos/responses/user.create.response.dto';
 import { AuthSignUpRequestDto } from '../../../core/auth/dtos/request/auth.sign-up.request.dto';
@@ -63,6 +63,10 @@ import { AuthJwtAccessPayloadDto } from '../../../core/auth/dtos/jwt/auth.jwt.ac
 import { AuthChangePasswordRequestDto } from '../../../core/auth/dtos/request/auth.change-password.request.dto';
 import { DataSource, QueryRunner } from 'typeorm';
 import { UserChangePassDoc } from '../docs/user.change-pass.doc';
+import { UserMeDoc } from '../docs/user.me.doc';
+import { UserMeResponseDto } from '../dtos/responses/user.me.response.dto';
+import { UserUpdateResponseDto } from '../dtos/responses/user.update.response.dto';
+import { UserUpdateDoc } from '../docs/user.update.doc';
 
 @ApiTags('modules.user')
 @Controller()
@@ -83,8 +87,7 @@ export class UserController {
   @Post('/register')
   @Response('auth.register')
   async register(
-    @Body() { email, name, gender, password }: AuthSignUpRequestDto,
-    @Req() request: Request
+    @Body() { email, name, gender, password }: AuthSignUpRequestDto
   ): Promise<IResponse<UserCreateResponseDto>> {
     const emailExist: boolean = await this.userService.existByEmail(email);
     if (emailExist) {
@@ -324,6 +327,40 @@ export class UserController {
       data: token,
     };
   }
+
+  @UserMeDoc()
+  @Response('auth.me')
+  @AuthJwtAccessProtected()
+  @Get('/me')
+  async me(
+    @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
+  ): Promise<IResponse<UserMeResponseDto>> {
+    const user: UserEntity | null = await this.userService.findOneById(id);
+
+    if (!user) {
+      throw new NotFoundException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.NOT_FOUND,
+        message: 'user.error.notFound',
+      });
+    } else if (user.status !== ENUM_USER_STATUS.ACTIVE) {
+      throw new ForbiddenException({
+        statusCode: ENUM_USER_STATUS_CODE_ERROR.INACTIVE_FORBIDDEN,
+        message: 'user.error.inactive',
+      });
+    }
+
+    return {
+      data: user,
+    };
+  }
+
+  @UserUpdateDoc()
+  @Response('auth.updateInfo')
+  @AuthJwtAccessProtected()
+  @Put('/update')
+  async update(
+    @Body() { email, name, gender }: AuthSignUpRequestDto
+  ): Promise<IResponse<UserUpdateResponseDto>> {}
 
   @UserUploadAvatarDoc()
   @AuthJwtAccessProtected()

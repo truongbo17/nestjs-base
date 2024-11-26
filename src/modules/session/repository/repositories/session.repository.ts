@@ -14,7 +14,12 @@ export class SessionRepository {
 
   async create(data: SessionCreateRequestDto): Promise<SessionEntity> {
     return await this.sessionRepository.save(
-      this.sessionRepository.create(data)
+      this.sessionRepository.create({
+        hash: data.hash,
+        user: {
+          id: data.user_id,
+        },
+      })
     );
   }
 
