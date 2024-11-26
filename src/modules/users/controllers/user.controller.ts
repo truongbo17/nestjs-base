@@ -28,7 +28,7 @@ import { AuthSignUpRequestDto } from '../../../core/auth/dtos/request/auth.sign-
 import { IAuthPassword } from '../../../core/auth/interfaces/auth.interface';
 import { ENUM_USER_STATUS_CODE_ERROR } from '../enums/user.status-code.enum';
 import { APP_STATUS_CODE_ERROR } from '../../../core/app/enums/app.enum';
-import { UserEntity } from '../repositories/entities/user.entity';
+import { UserEntity } from '../repository/entities/user.entity';
 import { Queue } from 'bullmq';
 import { InjectQueue } from '@nestjs/bullmq';
 import { ENUM_WORKER_QUEUES } from '../../../workers/enums/worker.enum';
@@ -42,6 +42,10 @@ import {
 import { ENUM_USER_STATUS } from '../enums/user.enum';
 import { AuthJwtAccessProtected } from '../../../core/auth/decorators/auth.jwt.decorator';
 import { UserUploadAvatarDoc } from '../docs/user.upload-avatar.doc';
+import { SessionService } from '../../session/services/session.service';
+import crypto from 'crypto';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { SessionEntity } from '../../session/repository/entities/session.entity';
 
 @ApiTags('modules.user')
 @Controller()
@@ -53,7 +57,8 @@ export class UserController {
     private readonly userService: UserService,
     private readonly authService: AuthService,
     @InjectQueue(ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE)
-    private readonly emailQueue: Queue
+    private readonly emailQueue: Queue,
+    private readonly sessionService: SessionService
   ) {}
 
   @UserRegisterDoc()
@@ -111,6 +116,7 @@ export class UserController {
 
   @UserLoginCredentialDoc()
   @Post('login/credential')
+  @Response('auth.login_credential')
   async loginWithCredential(
     @Body() { email, password }: AuthLoginRequestDto,
     @Req() request: IRequestApp
@@ -138,6 +144,22 @@ export class UserController {
         message: 'user.error.inactive',
       });
     }
+
+    const hash: string = crypto
+      .createHash('sha256')
+      .update(randomStringGenerator())
+      .digest('hex');
+
+    const session: SessionEntity = await this.sessionService.create({
+      user_id: user.id,
+      hash: hash,
+    });
+
+    const token = await this.authService.createToken(user, session.id);
+
+    return {
+      data: token,
+    };
   }
 
   @UserLoginSocialGoogleDoc()

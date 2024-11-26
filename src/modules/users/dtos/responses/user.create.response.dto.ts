@@ -44,7 +44,7 @@ export class UserCreateResponseDto extends DatabaseDto {
   @ApiProperty({
     required: true,
     nullable: false,
-    example: faker.number.int(),
+    example: faker.number.int({ min: 10, max: 100 }),
   })
   avatar: number;
 }

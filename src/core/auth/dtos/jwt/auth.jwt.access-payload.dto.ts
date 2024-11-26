@@ -27,7 +27,7 @@ export class AuthJwtAccessPayloadDto {
     required: true,
     nullable: false,
   })
-  session: string;
+  session: number;
 
   @ApiProperty({
     required: true,

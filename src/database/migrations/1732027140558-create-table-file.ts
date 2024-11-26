@@ -14,13 +14,25 @@ export class CreateTableFile1732027140558 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
+            name: 'storage',
+            type: 'varchar',
+            length: '255',
+            isNullable: false,
+          },
+          {
             name: 'path',
             type: 'varchar',
             length: '255',
             isNullable: false,
           },
+          {
+            name: 'createdAt',
+            type: 'timestamp',
+            default: 'CURRENT_TIMESTAMP',
+            isNullable: false,
+          },
         ],
-      }),
+      })
     );
   }
 

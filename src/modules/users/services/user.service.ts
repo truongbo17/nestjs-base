@@ -1,9 +1,9 @@
 import { UserServiceInterface } from '../interfaces/user.service.interface';
 import { Injectable } from '@nestjs/common';
 import { IAuthPassword } from '../../../core/auth/interfaces/auth.interface';
-import { UserEntity } from '../repositories/entities/user.entity';
+import { UserEntity } from '../repository/entities/user.entity';
 import { ENUM_USER_STATUS } from '../enums/user.enum';
-import { UserRepository } from '../repositories/repositories/user.repository';
+import { UserRepository } from '../repository/repositories/user.repository';
 import { UserCreateRequestDto } from '../dtos/requests/user.create.request.dto';
 
 @Injectable()

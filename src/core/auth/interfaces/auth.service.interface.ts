@@ -28,7 +28,7 @@ export interface IAuthService {
 
   createPayloadAccessToken(
     data: object,
-    session: string,
+    session: number,
     loginDate: Date,
     loginFrom: ENUM_AUTH_LOGIN_FROM
   ): Promise<AuthJwtAccessPayloadDto>;
@@ -50,7 +50,7 @@ export interface IAuthService {
 
   checkPasswordExpired(passwordExpired: Date): Promise<boolean>;
 
-  createToken(user: object, session: string): Promise<AuthLoginResponseDto>;
+  createToken(user: object, session: number): Promise<AuthLoginResponseDto>;
 
   getPasswordAttempt(): Promise<boolean>;
 

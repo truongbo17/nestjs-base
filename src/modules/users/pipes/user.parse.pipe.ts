@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, PipeTransform } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { UserEntity } from '../repositories/entities/user.entity';
+import { UserEntity } from '../repository/entities/user.entity';
 import { ENUM_USER_STATUS_CODE_ERROR } from '../enums/user.status-code.enum';
 
 @Injectable()

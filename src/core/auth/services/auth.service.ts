@@ -17,7 +17,7 @@ import dateHelper from '../../../utils/date.helper';
 import stringHelper from '../../../utils/helper.string';
 import { AuthLoginResponseDto } from '../dtos/response/auth.login.response.dto';
 import { AuthSocialGooglePayloadDto } from '../dtos/social/auth.social.google-payload.dto';
-import { UserEntity } from '../../../modules/users/repositories/entities/user.entity';
+import { UserEntity } from '../../../modules/users/repository/entities/user.entity';
 
 @Injectable()
 export class AuthService implements IAuthService {
@@ -162,7 +162,7 @@ export class AuthService implements IAuthService {
 
   async createPayloadAccessToken(
     data: UserEntity,
-    session: string,
+    session: number,
     loginDate: Date,
     loginFrom: ENUM_AUTH_LOGIN_FROM
   ): Promise<AuthJwtAccessPayloadDto> {
@@ -231,7 +231,7 @@ export class AuthService implements IAuthService {
 
   async createToken(
     user: UserEntity,
-    session: string
+    session: number
   ): Promise<AuthLoginResponseDto> {
     const loginDate = dateHelper.create();
 

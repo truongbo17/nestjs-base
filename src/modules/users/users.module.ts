@@ -2,9 +2,10 @@ import { Module } from '@nestjs/common';
 import { UserController } from './controllers/user.controller';
 import { UserService } from './services/user.service';
 import { AuthModule } from '../../core/auth/auth.module';
-import { UserRepositoryModule } from './repositories/user.repository.module';
+import { UserRepositoryModule } from './repository/user.repository.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ENUM_WORKER_QUEUES } from '../../workers/enums/worker.enum';
+import { SessionModule } from '../session/session.module';
 
 @Module({
   controllers: [UserController],
@@ -16,6 +17,7 @@ import { ENUM_WORKER_QUEUES } from '../../workers/enums/worker.enum';
     BullModule.registerQueueAsync({
       name: ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE,
     }),
+    SessionModule,
   ],
 })
 export class UsersModule {}

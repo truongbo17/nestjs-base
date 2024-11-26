@@ -25,25 +25,25 @@ export class CreateTableSession1732027197115 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'created_at',
+            name: 'createdAt',
             type: 'timestamp',
             default: 'CURRENT_TIMESTAMP',
             isNullable: false,
           },
           {
-            name: 'updated_at',
+            name: 'updatedAt',
             type: 'timestamp',
             default: null,
             onUpdate: 'CURRENT_TIMESTAMP',
             isNullable: true,
           },
           {
-            name: 'deleted_at',
+            name: 'deletedAt',
             type: 'timestamp',
             isNullable: true,
           },
         ],
-      }),
+      })
     );
   }
 

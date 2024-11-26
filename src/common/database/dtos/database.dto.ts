@@ -5,7 +5,7 @@ import { Exclude } from 'class-transformer';
 export class DatabaseDto {
   @ApiProperty({
     description: 'ID',
-    example: faker.number.int(),
+    example: faker.number.int({ min: 10, max: 100 }),
     required: true,
   })
   id: number;
@@ -25,6 +25,14 @@ export class DatabaseDto {
     nullable: true,
   })
   updatedAt: Date | null;
+
+  @ApiProperty({
+    description: 'Date deleted at',
+    example: faker.date.recent(),
+    required: false,
+    nullable: true,
+  })
+  deletedAt: Date | null;
 
   @ApiHideProperty()
   @Exclude()
