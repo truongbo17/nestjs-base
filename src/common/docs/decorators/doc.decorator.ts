@@ -3,7 +3,9 @@ import {
   IDocDefaultOptions,
   IDocOfOptions,
   IDocOptions,
+  IDocRequestFileOptions,
   IDocRequestOptions,
+  IDocResponseFileOptions,
   IDocResponseOptions,
 } from '../interfaces/doc.interface';
 import {
@@ -25,6 +27,7 @@ import { ENUM_MESSAGE_LANGUAGE } from '../../i18n/enums/i18n.enum';
 import { ENUM_DOC_REQUEST_BODY_TYPE } from '../enums/doc.enum';
 import { APP_STATUS_CODE_ERROR } from '../../../core/app/enums/app.enum';
 import { ENUM_AUTH_STATUS_CODE_ERROR } from '../../../core/auth/enums/auth.status-code.enum';
+import { ENUM_FILE_MIME } from '../../files/enums/file.enum';
 
 export default function DocDefault<T>(
   options: IDocDefaultOptions<T>
@@ -358,5 +361,64 @@ export function DocAllOf(
       },
     }),
     ...docs
+  );
+}
+
+export function DocRequestFile(options?: IDocRequestFileOptions) {
+  const docs: Array<ClassDecorator | MethodDecorator> = [];
+
+  if (options?.params) {
+    const params: MethodDecorator[] = options.params.map(param =>
+      ApiParam(param)
+    );
+    docs.push(...params);
+  }
+
+  if (options?.queries) {
+    const queries: MethodDecorator[] = options.queries.map(query =>
+      ApiQuery(query)
+    );
+    docs.push(...queries);
+  }
+
+  const fieldName = options?.fieldName || 'file';
+
+  const schemaProperties: Record<string, any> = {
+    [fieldName]: {
+      type: 'string',
+      format: 'binary',
+    },
+  };
+
+  if (options?.dto) {
+    const dtoInstance = new options.dto();
+    Object.keys(dtoInstance).forEach(key => {
+      schemaProperties[key] = { type: typeof dtoInstance[key] };
+    });
+  }
+
+  docs.push(
+    ApiBody({
+      schema: {
+        type: 'object',
+        properties: schemaProperties,
+      },
+    })
+  );
+
+  return applyDecorators(ApiConsumes('multipart/form-data'), ...docs);
+}
+
+export function DocResponseFile(
+  options?: IDocResponseFileOptions
+): MethodDecorator {
+  const httpStatus: HttpStatus = options?.httpStatus ?? HttpStatus.OK;
+
+  return applyDecorators(
+    ApiProduces(options?.fileType ?? ENUM_FILE_MIME.CSV),
+    ApiResponse({
+      description: httpStatus.toString(),
+      status: httpStatus,
+    })
   );
 }

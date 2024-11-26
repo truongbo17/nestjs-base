@@ -13,11 +13,10 @@ import {
   Put,
   UnauthorizedException,
   UploadedFile,
-  UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { UploaderService } from '../../../common/files/services/uploader/upload.service';
@@ -68,7 +67,13 @@ import { UserMeResponseDto } from '../dtos/responses/user.me.response.dto';
 import { UserUpdateResponseDto } from '../dtos/responses/user.update.response.dto';
 import { UserUpdateDoc } from '../docs/user.update.doc';
 import { UserUpdateRequestDto } from '../dtos/requests/user.update.request.dto';
-import { ENUM_STORAGE } from '../../../common/files/enums/file.enum';
+import {
+  ENUM_FILE_MIME_IMAGE,
+  ENUM_STORAGE,
+} from '../../../common/files/enums/file.enum';
+import { FileUploadSingle } from '../../../common/files/decorators/file.decorator';
+import { FileRequiredPipe } from '../../../common/files/pipes/file.required.pipe';
+import { FileTypePipe } from '../../../common/files/pipes/file.type.pipe';
 
 @ApiTags('modules.user')
 @Controller()
@@ -87,7 +92,7 @@ export class UserController {
 
   @UserRegisterDoc()
   @Post('/register')
-  @Response('auth.register')
+  @Response('auth.register', { success: true })
   async register(
     @Body() { email, name, gender, password }: AuthSignUpRequestDto
   ): Promise<IResponse<UserCreateResponseDto>> {
@@ -139,7 +144,7 @@ export class UserController {
 
   @UserLoginCredentialDoc()
   @Post('login/credential')
-  @Response('auth.loginWithCredential')
+  @Response('auth.loginWithCredential', { success: true })
   async loginWithCredential(
     @Body() { email, password }: AuthLoginRequestDto
   ): Promise<IResponse<AuthLoginResponseDto>> {
@@ -190,7 +195,7 @@ export class UserController {
 
   @UserLoginSocialGoogleDoc()
   @AuthSocialGoogleProtected()
-  @Response('auth.loginWithSocialGoogle')
+  @Response('auth.loginWithSocialGoogle', { success: true })
   @Post('login/google')
   async loginWithGoogle(
     @AuthJwtPayload<AuthSocialGooglePayloadDto>()
@@ -230,7 +235,7 @@ export class UserController {
   }
 
   @UserChangePassDoc()
-  @Response('auth.changePassword')
+  @Response('auth.changePassword', { success: true })
   @AuthJwtAccessProtected()
   @Patch('/change-password')
   async changePassword(
@@ -278,7 +283,7 @@ export class UserController {
   }
 
   @UserRefreshTokenDoc()
-  @Response('auth.refresh')
+  @Response('auth.refresh', { success: true })
   @AuthJwtRefreshProtected()
   @Post('refresh')
   async refresh(
@@ -309,7 +314,7 @@ export class UserController {
   }
 
   @UserMeDoc()
-  @Response('auth.me')
+  @Response('auth.me', { success: true })
   @AuthJwtAccessProtected()
   @Get('/me')
   async me(
@@ -323,7 +328,7 @@ export class UserController {
   }
 
   @UserUpdateDoc()
-  @Response('auth.updateInfo')
+  @Response('auth.updateInfo', { success: true })
   @AuthJwtAccessProtected()
   @Put('/update')
   async update(
@@ -341,9 +346,23 @@ export class UserController {
 
   @UserUploadAvatarDoc()
   @AuthJwtAccessProtected()
-  @Response('user.uploadPhotoProfile')
+  @Response('user.uploadPhotoProfile', { success: true })
   @Post('avatar/upload')
-  @UseInterceptors(FileInterceptor('file'))
+  @FileUploadSingle({
+    field: 'file',
+    fileSize: 10000,
+  })
+  @UsePipes(
+    new FileRequiredPipe('file'),
+    new FileTypePipe(
+      [
+        ENUM_FILE_MIME_IMAGE.JPG,
+        ENUM_FILE_MIME_IMAGE.JPEG,
+        ENUM_FILE_MIME_IMAGE.PNG,
+      ],
+      'file'
+    )
+  )
   async upload(
     @UploadedFile() file: Express.Multer.File,
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
