@@ -25,7 +25,7 @@ import { KafkaCommonModule } from './core/kafka/kafka.common.module';
     // Workers
     WorkerModule,
     //Kafka
-    KafkaCommonModule,
+    KafkaCommonModule.forRoot(),
     // Modules append...
   ],
   controllers: [],

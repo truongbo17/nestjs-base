@@ -7,12 +7,7 @@ import { CreateTopicCommand } from './create-topic.command';
 import { DeleteTopicCommand } from './delete-topic.command';
 
 @Module({
-  imports: [LoggerModule.forRoot(false), ConsoleModule, KafkaAdminModule],
-  providers: [
-    GetCurrentVersionCommand,
-    Logger,
-    CreateTopicCommand,
-    DeleteTopicCommand,
-  ],
+  imports: [LoggerModule.forRoot(false), ConsoleModule],
+  providers: [GetCurrentVersionCommand, Logger],
 })
 export class AppCommandModule {}

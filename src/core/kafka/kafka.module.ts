@@ -1,11 +1,14 @@
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { KafkaService } from './services/kafka.service';
 import { KAFKA_SERVICE_NAME } from './constants/kafka.enum';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ProducerConfig } from 'kafkajs';
 
+@Global()
 @Module({
+  providers: [KafkaService],
+  exports: [KafkaService],
   imports: [
     ClientsModule.registerAsync([
       {
@@ -32,7 +35,5 @@ import { ProducerConfig } from 'kafkajs';
       },
     ]),
   ],
-  providers: [KafkaService],
-  exports: [KafkaService],
 })
 export class KafkaModule {}
