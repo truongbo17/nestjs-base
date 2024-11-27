@@ -5,6 +5,7 @@ import {
   DocRequestFile,
   DocResponse,
 } from '../../../common/docs/decorators/doc.decorator';
+import { UserUpdateResponseDto } from '../dtos/responses/user.update.response.dto';
 
 export function UserUploadAvatarDoc(): MethodDecorator {
   return applyDecorators(
@@ -13,6 +14,6 @@ export function UserUploadAvatarDoc(): MethodDecorator {
     }),
     DocAuth({ jwtAccessToken: true }),
     DocRequestFile({ fieldName: 'file' }),
-    DocResponse('user.uploadPhotoProfile')
+    DocResponse('user.uploadPhotoProfile', { dto: UserUpdateResponseDto })
   );
 }

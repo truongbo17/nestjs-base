@@ -78,4 +78,8 @@ export class UserService implements UserServiceInterface {
 
     return user;
   }
+
+  async updateAvatar(user: UserEntity, fileId: number): Promise<UserEntity> {
+    return this.userRepository.save(user);
+  }
 }

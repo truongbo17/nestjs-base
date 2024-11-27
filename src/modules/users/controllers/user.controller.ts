@@ -74,6 +74,9 @@ import {
 import { FileUploadSingle } from '../../../common/files/decorators/file.decorator';
 import { FileRequiredPipe } from '../../../common/files/pipes/file.required.pipe';
 import { FileTypePipe } from '../../../common/files/pipes/file.type.pipe';
+import { FileService } from '../../file/services/file.service';
+import { FileEntity } from '../../file/repository/entities/file.entity';
+import { UploadFileInterface } from '../../../common/files/interfaces/upload-file.interface';
 
 @ApiTags('modules.user')
 @Controller()
@@ -87,7 +90,8 @@ export class UserController {
     @InjectQueue(ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE)
     private readonly emailQueue: Queue,
     private readonly sessionService: SessionService,
-    private readonly dataSource: DataSource
+    private readonly dataSource: DataSource,
+    private readonly fileService: FileService
   ) {}
 
   @UserRegisterDoc()
@@ -366,8 +370,23 @@ export class UserController {
   async upload(
     @UploadedFile() file: Express.Multer.File,
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
-  ) {
-    const user = this.userService.activeUser(id);
-    console.log(await this.uploadService.upload(file, ENUM_STORAGE.LOCAL));
+  ): Promise<IResponse<UserUpdateResponseDto>> {
+    let user = await this.userService.activeUser(id);
+
+    const fileUpload: UploadFileInterface = await this.uploadService.upload(
+      file,
+      ENUM_STORAGE.LOCAL
+    );
+
+    const fileSaved: FileEntity = await this.fileService.create({
+      storage: fileUpload.storage,
+      path: fileUpload.path,
+    });
+
+    user = await this.userService.updateAvatar(user, fileSaved.id);
+
+    return {
+      data: user,
+    };
   }
 }
