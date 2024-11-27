@@ -27,7 +27,7 @@ export class AppGeneralFilter implements ExceptionFilter {
     private readonly configService: ConfigService<AllConfigType>
   ) {}
 
-  async catch(exception: unknown, host: ArgumentsHost): Promise<void> {
+  async catch(exception: Error, host: ArgumentsHost): Promise<void> {
     const { httpAdapter } = this.httpAdapterHost;
 
     const ctx: HttpArgumentsHost = host.switchToHttp();
@@ -85,7 +85,7 @@ export class AppGeneralFilter implements ExceptionFilter {
     const responseBody: IAppException = {
       success: false,
       statusCode,
-      message,
+      message: exception.message ?? message,
       _metadata: metadata,
     };
 

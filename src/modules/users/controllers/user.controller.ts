@@ -345,12 +345,12 @@ export class UserController {
   }
 
   @UserUploadAvatarDoc()
-  @AuthJwtAccessProtected()
+  // @AuthJwtAccessProtected()
   @Response('user.uploadPhotoProfile', { success: true })
   @Post('avatar/upload')
   @FileUploadSingle({
     field: 'file',
-    fileSize: 10000,
+    fileSize: 10000000,
   })
   @UsePipes(
     new FileRequiredPipe('file'),

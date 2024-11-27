@@ -62,7 +62,7 @@ export class UserService implements UserServiceInterface {
   }
 
   async activeUser(id: number): Promise<UserEntity> {
-    let user: UserEntity | null = await this.findOneById(id);
+    const user: UserEntity | null = await this.findOneById(id);
 
     if (!user) {
       throw new NotFoundException({
