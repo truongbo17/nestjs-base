@@ -13,7 +13,6 @@ import {
   Put,
   UnauthorizedException,
   UploadedFile,
-  UsePipes,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { I18nLangService } from '../../../common/i18n/services/i18n-lang.service';
@@ -356,19 +355,19 @@ export class UserController {
     field: 'file',
     fileSize: 10000000,
   })
-  @UsePipes(
-    new FileRequiredPipe('file'),
-    new FileTypePipe(
-      [
-        ENUM_FILE_MIME_IMAGE.JPG,
-        ENUM_FILE_MIME_IMAGE.JPEG,
-        ENUM_FILE_MIME_IMAGE.PNG,
-      ],
-      'file'
-    )
-  )
   async upload(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new FileRequiredPipe(),
+      new FileTypePipe(
+        [
+          ENUM_FILE_MIME_IMAGE.JPG,
+          ENUM_FILE_MIME_IMAGE.JPEG,
+          ENUM_FILE_MIME_IMAGE.PNG,
+        ],
+        'file'
+      )
+    )
+    file: Express.Multer.File,
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
   ): Promise<IResponse<UserUpdateResponseDto>> {
     let user: UserEntity = await this.userService.activeUser(id);

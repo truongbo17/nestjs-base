@@ -8,12 +8,10 @@ import { EntityRelational } from '../../../../common/database/relation/entities/
 export class FileRepository {
   constructor(
     @InjectRepository(FileEntity)
-    private readonly fileEntityRepository: Repository<FileEntity>
+    private readonly fileRepository: Repository<FileEntity>
   ) {}
 
   async create(data: EntityRelational): Promise<FileEntity> {
-    return await this.fileEntityRepository.save(
-      this.fileEntityRepository.create(data)
-    );
+    return await this.fileRepository.save(this.fileRepository.create(data));
   }
 }

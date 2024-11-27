@@ -6,6 +6,7 @@ import { UserRepositoryModule } from './repository/user.repository.module';
 import { BullModule } from '@nestjs/bullmq';
 import { ENUM_WORKER_QUEUES } from '../../workers/enums/worker.enum';
 import { SessionModule } from '../session/session.module';
+import { FileModule } from '../file/file.module';
 
 @Module({
   controllers: [UserController],
@@ -18,6 +19,7 @@ import { SessionModule } from '../session/session.module';
       name: ENUM_WORKER_QUEUES.EMAIL_REGISTER_QUEUE,
     }),
     SessionModule,
+    FileModule,
   ],
 })
 export class UsersModule {}

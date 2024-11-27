@@ -12,7 +12,7 @@ export function UserMeDoc(): MethodDecorator {
       summary: 'User get me',
     }),
     DocAuth({ jwtAccessToken: true }),
-    DocResponse<UserMeResponseDto>('auth.loginWithSocialGoogle', {
+    DocResponse<UserMeResponseDto>('auth.me', {
       dto: UserMeResponseDto,
     })
   );
