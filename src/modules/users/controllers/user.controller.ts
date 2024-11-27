@@ -345,7 +345,7 @@ export class UserController {
   }
 
   @UserUploadAvatarDoc()
-  // @AuthJwtAccessProtected()
+  @AuthJwtAccessProtected()
   @Response('user.uploadPhotoProfile', { success: true })
   @Post('avatar/upload')
   @FileUploadSingle({
