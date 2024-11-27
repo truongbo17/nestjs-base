@@ -18,6 +18,7 @@ import { QueueModule } from './queue/queue.module';
 import { FileModule } from './files/file.module';
 import authConfig from '../config/auth.config';
 import { RequestModule } from './request/request.module';
+import kafkaConfig from '../config/kafka.config';
 
 @Module({
   controllers: [],
@@ -38,6 +39,7 @@ import { RequestModule } from './request/request.module';
         redisConfig,
         mailConfig,
         authConfig,
+        kafkaConfig,
       ],
       envFilePath: ['.env'],
     }),

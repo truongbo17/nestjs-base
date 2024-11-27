@@ -7,6 +7,7 @@ import { MiddlewareConfigType } from './middleware.config.type';
 import { RedisConfigType } from './redis.config.type';
 import { MailConfigType } from './mail-config.type';
 import { AuthConfigType } from './auth.config.type';
+import { KafkaConfigType } from './kafka.config.type';
 
 export type AllConfigType = {
   app: AppConfig;
@@ -18,4 +19,5 @@ export type AllConfigType = {
   redis: RedisConfigType;
   mail: MailConfigType;
   auth: AuthConfigType;
+  kafka: KafkaConfigType;
 };
