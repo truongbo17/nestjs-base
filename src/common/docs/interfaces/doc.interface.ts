@@ -40,11 +40,6 @@ export type IDocRequestFileOptions = Omit<IDocRequestOptions, 'bodyType'> & {
   fieldName?: string;
 };
 
-export interface IDocGuardOptions {
-  policy?: boolean;
-  role?: boolean;
-}
-
 export interface IDocResponseOptions<T = any> {
   success?: boolean;
   statusCode?: number;
