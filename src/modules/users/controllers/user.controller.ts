@@ -371,22 +371,37 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
     @AuthJwtPayload<AuthJwtAccessPayloadDto>() { id }: AuthJwtAccessPayloadDto
   ): Promise<IResponse<UserUpdateResponseDto>> {
-    let user = await this.userService.activeUser(id);
+    let user: UserEntity = await this.userService.activeUser(id);
 
-    const fileUpload: UploadFileInterface = await this.uploadService.upload(
-      file,
-      ENUM_STORAGE.LOCAL
-    );
+    const queryRunner: QueryRunner = this.dataSource.createQueryRunner();
 
-    const fileSaved: FileEntity = await this.fileService.create({
-      storage: fileUpload.storage,
-      path: fileUpload.path,
-    });
+    try {
+      await queryRunner.startTransaction();
+      const fileUpload: UploadFileInterface = await this.uploadService.upload(
+        file,
+        ENUM_STORAGE.LOCAL
+      );
 
-    user = await this.userService.updateAvatar(user, fileSaved.id);
+      const fileSaved: FileEntity = await this.fileService.create({
+        storage: fileUpload.storage,
+        path: fileUpload.path,
+      });
 
-    return {
-      data: user,
-    };
+      user = await this.userService.updateAvatar(user, fileSaved);
+
+      await queryRunner.commitTransaction();
+      return {
+        data: user,
+      };
+    } catch (e) {
+      await queryRunner.rollbackTransaction();
+      throw new InternalServerErrorException({
+        statusCode: APP_STATUS_CODE_ERROR.APP_ERROR,
+        message: 'http.serverError.internalServerError',
+        _error: e.message,
+      });
+    } finally {
+      await queryRunner.release();
+    }
   }
 }

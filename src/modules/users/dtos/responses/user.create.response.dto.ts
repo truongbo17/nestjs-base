@@ -3,6 +3,7 @@ import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { faker } from '@faker-js/faker';
 import { Exclude } from 'class-transformer';
 import { ENUM_USER_GENDER, ENUM_USER_STATUS } from '../../enums/user.enum';
+import { FileCreateResponseDto } from '../../../file/dtos/responses/file.create.response.dto';
 
 export class UserCreateResponseDto extends DatabaseDto {
   @ApiProperty({
@@ -42,9 +43,9 @@ export class UserCreateResponseDto extends DatabaseDto {
   gender?: ENUM_USER_GENDER;
 
   @ApiProperty({
-    required: true,
-    nullable: false,
-    example: faker.number.int({ min: 10, max: 100 }),
+    nullable: true,
+    type: FileCreateResponseDto,
+    description: 'Avatar of the user',
   })
-  avatar: number;
+  avatar?: FileCreateResponseDto;
 }

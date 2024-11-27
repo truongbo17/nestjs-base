@@ -13,10 +13,10 @@ export class DatabaseDto {
   @ApiProperty({
     description: 'Date created at',
     example: faker.date.recent(),
-    required: true,
-    nullable: false,
+    required: false,
+    nullable: true,
   })
-  createdAt: Date;
+  createdAt?: Date;
 
   @ApiProperty({
     description: 'Date updated at',
@@ -24,7 +24,7 @@ export class DatabaseDto {
     required: false,
     nullable: true,
   })
-  updatedAt: Date | null;
+  updatedAt?: Date | null;
 
   @ApiHideProperty()
   @Exclude()

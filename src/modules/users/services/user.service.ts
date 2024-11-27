@@ -11,6 +11,7 @@ import { UserRepository } from '../repository/repositories/user.repository';
 import { UserCreateRequestDto } from '../dtos/requests/user.create.request.dto';
 import { UserUpdateRequestDto } from '../dtos/requests/user.update.request.dto';
 import { ENUM_USER_STATUS_CODE_ERROR } from '../enums/user.status-code.enum';
+import { FileEntity } from '../../file/repository/entities/file.entity';
 
 @Injectable()
 export class UserService implements UserServiceInterface {
@@ -79,7 +80,9 @@ export class UserService implements UserServiceInterface {
     return user;
   }
 
-  async updateAvatar(user: UserEntity, fileId: number): Promise<UserEntity> {
+  async updateAvatar(user: UserEntity, file: FileEntity): Promise<UserEntity> {
+    user.avatar = file;
+
     return this.userRepository.save(user);
   }
 }

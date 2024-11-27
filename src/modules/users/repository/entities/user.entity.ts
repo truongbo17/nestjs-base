@@ -4,11 +4,14 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { EntityRelational } from '../../../../common/database/relation/entities/relational-entity-helper';
 import { ENUM_USER_GENDER, ENUM_USER_STATUS } from '../../enums/user.enum';
+import { FileEntity } from '../../../file/repository/entities/file.entity';
 
 @Entity({
   name: 'users',
@@ -33,8 +36,9 @@ export class UserEntity extends EntityRelational {
   @Column({ type: String, nullable: false })
   gender: ENUM_USER_GENDER;
 
-  @Column({ type: Number, nullable: false })
-  avatar: number;
+  @OneToOne(() => FileEntity, { cascade: true, eager: true })
+  @JoinColumn({ name: 'avatar' })
+  avatar: FileEntity;
 
   @CreateDateColumn()
   createdAt: Date;
