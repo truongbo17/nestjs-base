@@ -29,14 +29,14 @@ const stringHelper = {
 
   censor(text: string): string {
     if (text.length <= 3) {
-      const stringCensor = '*'.repeat(2);
+      const stringCensor: string = '*'.repeat(2);
       return `${stringCensor}${text.slice(-1)}`;
     } else if (text.length <= 10) {
-      const stringCensor = '*'.repeat(7);
+      const stringCensor: string = '*'.repeat(7);
       return `${stringCensor}${text.slice(-3)}`;
     }
 
-    const stringCensor = '*'.repeat(10);
+    const stringCensor: string = '*'.repeat(10);
     return `${text.slice(0, 3)}${stringCensor}${text.slice(-4)}`;
   },
 
@@ -44,8 +44,8 @@ const stringHelper = {
     password: string,
     options?: IHelperStringPasswordOptions
   ): boolean {
-    const length = options?.length ?? 8;
-    const regex = new RegExp(
+    const length: number = options?.length ?? 8;
+    const regex: RegExp = new RegExp(
       `^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{${length},}$`
     );
 

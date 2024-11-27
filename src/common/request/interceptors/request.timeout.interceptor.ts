@@ -14,7 +14,7 @@ import {
   REQUEST_CUSTOM_TIMEOUT_META_KEY,
   REQUEST_CUSTOM_TIMEOUT_VALUE_META_KEY,
 } from '../constants/request.constant';
-import { ENUM_REQUEST_STATUS_CODE_ERROR } from '../enums/request.status-code.enum';
+import { APP_STATUS_CODE_ERROR } from '../../../core/app/enums/app.enum';
 
 @Injectable()
 export class RequestTimeoutInterceptor
@@ -49,7 +49,7 @@ export class RequestTimeoutInterceptor
           catchError(err => {
             if (err instanceof TimeoutError) {
               throw new RequestTimeoutException({
-                statusCode: ENUM_REQUEST_STATUS_CODE_ERROR.TIMEOUT,
+                statusCode: APP_STATUS_CODE_ERROR.APP_TIMEOUT,
                 message: 'http.clientError.requestTimeOut',
               });
             }
@@ -62,7 +62,7 @@ export class RequestTimeoutInterceptor
           catchError(err => {
             if (err instanceof TimeoutError) {
               throw new RequestTimeoutException({
-                statusCode: ENUM_REQUEST_STATUS_CODE_ERROR.TIMEOUT,
+                statusCode: APP_STATUS_CODE_ERROR.APP_TIMEOUT,
                 message: 'http.clientError.requestTimeOut',
               });
             }

@@ -25,10 +25,10 @@ export class EmailRegisterProcessor
     super();
   }
 
-  async process(job: Job<EmailWorkerDto, any, string>): Promise<void> {
+  async process(job: Job<EmailWorkerDto>): Promise<void> {
     try {
       const jobName: string = job.name;
-      const responseSendMail = await this.processRegister(job.data.send);
+      const responseSendMail: void = await this.processRegister(job.data.send);
 
       this.logger.log(
         `Processing job ${jobName} with data: ${JSON.stringify(job)} with response: ${responseSendMail}`

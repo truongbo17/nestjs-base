@@ -1,5 +1,6 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { KafkaModule } from './kafka.module';
+import { KafkaRouterModule } from './kafka.router.module';
 
 @Module({})
 export class KafkaCommonModule {

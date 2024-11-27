@@ -9,6 +9,10 @@ interface IHelperDateCreateOptions {
   dayOf?: ENUM_HELPER_DATE_DAY_OF;
 }
 
+interface IHelperDateOptionsCreate {
+  startOfDay?: boolean;
+}
+
 const dateHelper = {
   calculateAge(dateOfBirth: Date, fromYear?: number): Duration {
     const dateTime = DateTime.now()
@@ -159,6 +163,25 @@ const dateHelper = {
       .setZone(process.env.TZ)
       .minus(duration)
       .toJSDate();
+  },
+
+  timestamp(
+    date?: string | number | Date,
+    options?: IHelperDateOptionsCreate
+  ): number {
+    let mDate: DateTime;
+
+    if (date) {
+      mDate = DateTime.fromJSDate(new Date(date));
+    } else {
+      mDate = DateTime.now();
+    }
+
+    if (options?.startOfDay) {
+      mDate = mDate.startOf('day');
+    }
+
+    return mDate.toMillis();
   },
 };
 

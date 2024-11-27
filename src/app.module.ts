@@ -6,7 +6,7 @@ import { CommonModule } from './common/common.module';
 import { TypeOrmConfigService } from './common/database/typeorm-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import { KafkaModule } from './core/kafka/kafka.module';
+import { KafkaCommonModule } from './core/kafka/kafka.common.module';
 
 @Module({
   imports: [
@@ -25,7 +25,7 @@ import { KafkaModule } from './core/kafka/kafka.module';
     // Workers
     WorkerModule,
     //Kafka
-    KafkaModule,
+    KafkaCommonModule,
     // Modules append...
   ],
   controllers: [],

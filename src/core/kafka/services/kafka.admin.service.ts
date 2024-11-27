@@ -20,12 +20,13 @@ export class KafkaAdminService
   private readonly defaultPartition: number;
 
   constructor(private readonly configService: ConfigService) {
-    this.clientId = <string>this.configService.get<string>(
+    this.clientId = <string>this.configService.getOrThrow<string>(
       'kafka.admin.clientId',
       {
         infer: true,
       }
     );
+
     this.brokers = this.configService
       .getOrThrow<string>('kafka.brokers', { infer: true })
       .split(',');

@@ -31,9 +31,9 @@ export class UserService implements UserServiceInterface {
 
   async create(
     { email, name, gender }: UserCreateRequestDto,
-    { passwordExpired, passwordHash, salt, passwordCreated }: IAuthPassword
+    { passwordHash }: IAuthPassword
   ): Promise<UserEntity> {
-    const user = new UserEntity();
+    const user: UserEntity = new UserEntity();
     user.email = email;
     user.name = name;
     user.gender = gender;
@@ -45,8 +45,8 @@ export class UserService implements UserServiceInterface {
 
   async updatePassword(
     user: UserEntity,
-    { passwordExpired, passwordHash, salt, passwordCreated }: IAuthPassword
-  ) {
+    { passwordHash }: IAuthPassword
+  ): Promise<UserEntity> {
     user.password = passwordHash;
 
     return this.userRepository.save(user);
