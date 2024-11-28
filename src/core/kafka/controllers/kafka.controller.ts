@@ -12,7 +12,9 @@ import {
 export class KafkaController {
   @MessageCommitOffsetInFirstRunning()
   @MessageTopic('nestjs.app.test')
-  async helloKafka(@MessageValue() value: KafkaDto): Promise<IKafkaResponse> {
+  async helloKafka(
+    @MessageValue() value: Record<string, any>
+  ): Promise<IKafkaResponse> {
     return value;
   }
 }
