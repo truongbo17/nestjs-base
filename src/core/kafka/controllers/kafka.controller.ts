@@ -19,7 +19,7 @@ export class KafkaController {
   }
 
   @MessageCommitOffsetInFirstRunning()
-  @MessageTopic(ENUM_KAFKA_TOPICS.NEST_APP_SUCCESS)
+  @MessageTopic(ENUM_KAFKA_TOPICS.NEST_APP_ERROR)
   async errorKafka(@MessageValue() value: KafkaDto): Promise<IKafkaResponse> {
     return value;
   }

@@ -16,7 +16,7 @@ export default async function (app: NestApplication) {
     .getOrThrow<string>('kafka.brokers', { infer: true })
     .split(',');
   const clientId: string = configService.getOrThrow<string>('kafka.clientId');
-  const consumerGroup: string = '';
+  const consumerGroup: string = 'test';
 
   const consumer: ConsumerConfig =
     configService.getOrThrow<ConsumerConfig>('kafka.consumer');

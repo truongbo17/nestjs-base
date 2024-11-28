@@ -23,8 +23,6 @@
     "migration:revert": "npm run typeorm -- --dataSource=src/database/data-source.ts migration:revert",
     "schema:drop": "npm run typeorm -- --dataSource=src/database/data-source.ts schema:drop",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "kafka:create-topics": "nestjs-command insert:kafka-topics",
-    "kafka:delete-topics": "nestjs-command remove:kafka-topics",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
