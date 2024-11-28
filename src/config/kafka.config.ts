@@ -10,6 +10,10 @@ import { IsBoolean, IsOptional, IsString } from 'class-validator';
 const DEFAULT_BROKERS: string = 'localhost:9092';
 
 class EnvironmentVariablesValidator {
+  @IsBoolean()
+  @IsOptional()
+  KAFKA_ENABLE?: boolean;
+
   @IsString()
   @IsOptional()
   KAFKA_CLIENT_ID?: string;
@@ -39,6 +43,8 @@ export default registerAs<KafkaConfigType>('kafka', () => {
   validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {
+    enable: process.env.KAFKA_ENABLE === 'true',
+
     clientId: <string>process.env.KAFKA_CLIENT_ID || 'KAFKA_CLIENT',
     brokers: process.env.KAFKA_BROKERS ?? DEFAULT_BROKERS,
 

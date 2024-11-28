@@ -1,6 +1,7 @@
 import { LegacyPartitioner } from 'kafkajs';
 
 export type KafkaConfigType = {
+  enable: boolean;
   clientId: string;
   brokers: string;
   username?: string;

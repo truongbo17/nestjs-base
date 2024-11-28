@@ -86,7 +86,9 @@ async function bootstrap() {
   app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
 
   // Kafka
-  await kafkaInit(app);
+  if (<boolean>configService.get('kafka.enable', { infer: true })) {
+    await kafkaInit(app);
+  }
 
   if (process.env.NODE_ENV !== Environment.PRODUCTION) {
     // Swagger
