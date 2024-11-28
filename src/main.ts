@@ -1,9 +1,8 @@
-import { NestFactory } from '@nestjs/core';
+import { NestApplication, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { AllConfigType } from './config/config.type';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'node:path';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 import * as process from 'node:process';
@@ -11,13 +10,13 @@ import { Environment } from './config/app.config';
 import compression from 'compression';
 import { useContainer } from 'class-validator';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
+import kafkaInit from './kafka';
 
 async function bootstrap() {
   // Run HTTP server
-  const app: NestExpressApplication =
-    await NestFactory.create<NestExpressApplication>(AppModule, {
-      cors: true,
-    });
+  const app: NestApplication = await NestFactory.create(AppModule, {
+    cors: true,
+  });
 
   // Get config
   const configService: ConfigService<AllConfigType> = app.get(
@@ -85,6 +84,9 @@ async function bootstrap() {
     )
   );
   app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
+
+  // Kafka
+  await kafkaInit(app);
 
   if (process.env.NODE_ENV !== Environment.PRODUCTION) {
     // Swagger
