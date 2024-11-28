@@ -45,6 +45,7 @@ $ npm run test:cov
 ```
 
 ## Todolist
+
 * I18N
 * Config
 * Command
@@ -56,3 +57,6 @@ $ npm run test:cov
 * Database
 * Mail
 * File upload
+* Upload file (local, s3)
+* Kafka (producer, consumer)
+* Authentication (JWT access token, refresh token, Google auth)
