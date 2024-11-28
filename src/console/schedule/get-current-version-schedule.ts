@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { Cron, Timeout } from '@nestjs/schedule';
 import { execSync } from 'child_process';
 import { LoggerService } from '../../common/logger/services/logger.service';
+import { ConfigService } from '@nestjs/config';
+import { Environment } from '../../config/app.config';
 
 @Injectable()
 export class GetCurrentVersionSchedule {
-  constructor(private readonly loggerService: LoggerService) {}
+  constructor(
+    private readonly loggerService: LoggerService,
+    private readonly configService: ConfigService
+  ) {}
 
   @Cron('*/5 * * * * *', {
     name: 'GetCurrentVersionSchedule',
@@ -27,6 +32,11 @@ export class GetCurrentVersionSchedule {
   }
 
   getCurrentVersion(): void {
-    execSync('npm run console:dev version', { stdio: 'inherit' });
+    const isProd: boolean =
+      this.configService.get('app.appEnv') === Environment.PRODUCTION;
+
+    execSync(`npm run ${isProd ? 'console' : 'console:dev'} version`, {
+      stdio: 'inherit',
+    });
   }
 }
