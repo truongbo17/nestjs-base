@@ -7,6 +7,11 @@ import { TypeOrmConfigService } from './common/database/typeorm-config.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { KafkaCommonModule } from './core/kafka/kafka.common.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { join } from 'node:path';
+import { AppResolver } from './common/resolvers/query.resolver';
 
 @Module({
   imports: [
@@ -24,11 +29,21 @@ import { KafkaCommonModule } from './core/kafka/kafka.common.module';
     RouterModule,
     // Workers
     WorkerModule,
-    //Kafka
+    // Kafka
     KafkaCommonModule.forRoot(),
+    // GraphQL
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      playground: false,
+      plugins: [ApolloServerPluginLandingPageLocalDefault()],
+      definitions: {
+        path: join(process.cwd(), 'src/graphql.ts'),
+      },
+      autoSchemaFile: true,
+    }),
     // Modules append...
   ],
   controllers: [],
-  providers: [],
+  providers: [AppResolver],
 })
 export class AppModule {}
