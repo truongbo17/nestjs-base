@@ -11,16 +11,10 @@ import {
 @Controller()
 export class KafkaController {
   @MessageCommitOffsetInFirstRunning()
-  @MessageTopic(ENUM_KAFKA_TOPICS.NEST_APP_SUCCESS)
+  @MessageTopic('nestjs.app.test')
   async helloKafka(
     @MessageValue() value: Record<string, any>
   ): Promise<IKafkaResponse> {
-    return value;
-  }
-
-  @MessageCommitOffsetInFirstRunning()
-  @MessageTopic(ENUM_KAFKA_TOPICS.NEST_APP_ERROR)
-  async errorKafka(@MessageValue() value: KafkaDto): Promise<IKafkaResponse> {
     return value;
   }
 }
