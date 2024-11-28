@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Admin, ITopicConfig, Kafka, KafkaConfig } from 'kafkajs';
 import { Logger } from '@nestjs/common/services/logger.service';
 import { ConfigService } from '@nestjs/config';
@@ -7,9 +7,7 @@ import { IKafkaCreateTopic } from '../interfaces/kafka.interface';
 import { IKafkaAdminService } from '../interfaces/kafka.admin-service.interface';
 
 @Injectable()
-export class KafkaAdminService
-  implements IKafkaAdminService, OnModuleInit, OnModuleDestroy
-{
+export class KafkaAdminService implements IKafkaAdminService {
   protected logger = new Logger(KafkaAdminService.name);
   private readonly kafka: Kafka;
   private readonly admin: Admin;
@@ -65,13 +63,13 @@ export class KafkaAdminService
     this.admin = this.kafka.admin();
   }
 
-  async onModuleInit(): Promise<void> {
-    await this.connect();
-  }
+  // async onModuleInit(): Promise<void> {
+  //   await this.connect();
+  // }
 
-  async onModuleDestroy(): Promise<void> {
-    await this.disconnect();
-  }
+  // async onModuleDestroy(): Promise<void> {
+  //   await this.disconnect();
+  // }
 
   async connect(): Promise<void> {
     this.logger.log(`Connecting ${KafkaAdminService.name} Admin`);
@@ -96,6 +94,7 @@ export class KafkaAdminService
   }
 
   async createTopics(): Promise<boolean> {
+    await this.connect();
     this.logger.log(`Topics ${this.topics}`);
 
     const currentTopic: string[] = await this.getAllTopicUnique();
@@ -134,10 +133,13 @@ export class KafkaAdminService
 
     this.logger.log(`${KafkaAdminService.name} Topic Created`);
 
+    await this.disconnect();
     return true;
   }
 
   async deleteTopics(): Promise<boolean> {
+    await this.connect();
+
     const currentTopic: string[] = await this.getAllTopicUnique();
 
     const data = [];
@@ -159,6 +161,8 @@ export class KafkaAdminService
     }
 
     this.logger.log(`${KafkaAdminService.name} Topic Deleted`);
+
+    await this.disconnect();
 
     return true;
   }
