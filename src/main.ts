@@ -76,14 +76,15 @@ async function bootstrap() {
       configService.getOrThrow('view.pathPublic', { infer: true })
     )
   );
-  app.useStaticAssets(
+
+  app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
+  app.setBaseViewsDir(
     join(
       __dirname,
       '..',
       configService.getOrThrow('view.pathView', { infer: true })
     )
   );
-  app.setViewEngine(configService.getOrThrow('view.engine', { infer: true }));
 
   // Kafka
   if (<boolean>configService.get('kafka.enable', { infer: true })) {

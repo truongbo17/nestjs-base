@@ -49,9 +49,11 @@ export class EmailRegisterProcessor
       subject: <string>subject,
       text: `${appName} ${subject}`,
       templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
+        __dirname,
+        '..',
+        '..',
+        '..',
+        '..',
         'templates',
         'email',
         'register.hbs'

@@ -41,7 +41,7 @@ export default registerAs<FileConfig>('file', () => {
     awsDefaultS3Bucket: process.env.AWS_DEFAULT_S3_BUCKET,
     awsS3Region: process.env.AWS_S3_REGION,
     maxFileSize: 5242880, // 5mb
-    pathLocal: path.join(process.env.PWD || process.cwd(), 'storage'),
+    pathLocal: path.join(__dirname, '..', '..', 'storage'),
     endpoint: process.env.AWS_URL,
     expiresIn: 3600,
   };

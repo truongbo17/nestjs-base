@@ -3,6 +3,23 @@
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
   "compilerOptions": {
-    "assets": [{ "include": "lang/**/*", "watchAssets": true }]
+    "assets": [
+      {
+        "include": "../views/**/*",
+        "outDir": "dist/views"
+      },
+      {
+        "include": "../public/**/*",
+        "outDir": "dist/public"
+      },
+      {
+        "include": "../templates/**/*",
+        "outDir": "dist/templates"
+      },
+      {
+        "include": "../storage/**/*",
+        "outDir": "dist/storage"
+      }
+    ]
   }
 }
