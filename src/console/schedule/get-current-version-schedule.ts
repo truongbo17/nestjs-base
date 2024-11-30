@@ -32,10 +32,10 @@ export class GetCurrentVersionSchedule {
   }
 
   getCurrentVersion(): void {
-    const isProd: boolean =
-      this.configService.get('app.appEnv') === Environment.PRODUCTION;
+    const isLocal: boolean =
+      this.configService.get('app.appEnv') === Environment.LOCAL;
 
-    execSync(`npm run ${isProd ? 'console' : 'console:dev'} version`, {
+    execSync(`npm run ${isLocal ? 'console:dev' : 'console'} version`, {
       stdio: 'inherit',
     });
   }

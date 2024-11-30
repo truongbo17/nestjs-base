@@ -4,6 +4,6 @@ import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [CommandModule],
-  providers: [Logger],
+  providers: [GetCurrentVersionSchedule, Logger],
 })
 export class ScheduleModule {}
