@@ -16,10 +16,7 @@ import {
   RESPONSE_MESSAGE_PROPERTIES_META_KEY,
   RESPONSE_SUCCESS_META_KEY,
 } from 'src/common/response/constants/response.constant';
-import {
-  IResponse,
-  ResponseInterceptorInterface,
-} from 'src/common/response/interfaces/response.interface';
+import { ResponseInterceptorInterface } from 'src/common/response/interfaces/response.interface';
 import {
   ResponseDto,
   ResponseMetadataDto,

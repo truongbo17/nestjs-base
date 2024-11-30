@@ -29,6 +29,10 @@ export class UserService implements UserServiceInterface {
     return this.userRepository.findOneByEmail(email);
   }
 
+  async findByEmail(email: string): Promise<UserEntity[]> {
+    return this.userRepository.findByEmail(email);
+  }
+
   async create(
     { email, name, gender }: UserCreateRequestDto,
     { passwordHash }: IAuthPassword

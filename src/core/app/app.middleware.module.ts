@@ -8,7 +8,6 @@ import {
   AppRawBodyParserMiddleware,
   AppTextBodyParserMiddleware,
   AppUrlencodedBodyParserMiddleware,
-  FileUploadLimitMiddleware,
 } from './middlewares/app.body-parser.middleware';
 import { AppCorsMiddleware } from './middlewares/app.cors.middleware';
 import { AppCustomLanguageMiddleware } from './middlewares/app.custom-language.middleware';

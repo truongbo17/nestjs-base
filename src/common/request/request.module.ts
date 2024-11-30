@@ -2,11 +2,10 @@ import {
   DynamicModule,
   HttpStatus,
   Module,
+  ValidationError,
   ValidationPipe,
 } from '@nestjs/common';
 import { APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
-import { ValidationError } from 'class-validator';
-import { RequestValidationException } from 'src/common/request/exceptions/request.validation.exception';
 import {
   DateGreaterThanConstraint,
   DateGreaterThanEqualConstraint,
@@ -25,6 +24,7 @@ import {
   LessThanOtherPropertyConstraint,
 } from 'src/common/request/validations/request.less-than-other-property.validation';
 import { RequestTimeoutInterceptor } from './interceptors/request.timeout.interceptor';
+import { RequestValidationException } from './exceptions/request.validation.exception';
 
 @Module({})
 export class RequestModule {
@@ -43,7 +43,7 @@ export class RequestModule {
             new ValidationPipe({
               transform: true,
               skipUndefinedProperties: true,
-              forbidUnknownValues: true,
+              // forbidUnknownValues: true,
               errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
               exceptionFactory: async (errors: ValidationError[]) =>
                 new RequestValidationException(errors),

@@ -107,6 +107,8 @@ export class UserController {
       });
     }
 
+    throw new Error('asda');
+
     try {
       const passwordHash: IAuthPassword =
         await this.authService.createPassword(password);

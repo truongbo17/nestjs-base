@@ -37,6 +37,12 @@ export class UserRepository {
     return this.usersRepository.findOneBy({ email: email });
   }
 
+  async findByEmail(email: string): Promise<UserEntity[]> {
+    return this.usersRepository.find({
+      where: { email: email },
+    });
+  }
+
   async save(user: UserEntity): Promise<UserEntity> {
     return this.usersRepository.save(user);
   }

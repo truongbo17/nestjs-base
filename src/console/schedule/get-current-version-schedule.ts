@@ -20,13 +20,13 @@ export class GetCurrentVersionSchedule {
     this.getCurrentVersion();
   }
 
-  @Timeout(3000)
+  @Timeout(500)
   runGetCurrentVersion() {
     this.getCurrentVersion();
 
     this.loggerService.log(
       'log',
-      'Start after 3 seconds',
+      'Start after 0.5 seconds',
       GetCurrentVersionSchedule.name
     );
   }

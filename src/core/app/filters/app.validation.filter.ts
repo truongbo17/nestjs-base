@@ -1,4 +1,9 @@
-import { ArgumentsHost, Catch, ExceptionFilter } from '@nestjs/common';
+import {
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  ExecutionContext,
+} from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
@@ -12,6 +17,7 @@ import { ENUM_MESSAGE_LANGUAGE } from '../../../common/i18n/enums/i18n.enum';
 import { ResponseMetadataDto } from '../../../common/response/dtos/response.dto';
 import { IAppException } from '../interfaces/app.interface';
 import { IMessageValidationError } from '../../../common/i18n/interfaces/i18n.interface';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Catch(RequestValidationException)
 export class AppValidationFilter implements ExceptionFilter {
