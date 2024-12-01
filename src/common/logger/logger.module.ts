@@ -20,10 +20,11 @@ export class LoggerModule {
                 winston.format.timestamp({
                   format: 'YYYY-MM-DD HH:mm:ss',
                 }),
+                winston.format.errors({ stack: true }),
                 winston.format.colorize({ all: true }),
                 winston.format.printf(
                   ({ timestamp, level, message, context }) => {
-                    return `${timestamp} \x1b[36m[${context || 'Application'} - ${isHttp ? 'HttpContext' : 'CommandContext'}]\x1b[0m ${level}: ${message}`;
+                    return `${timestamp} [Request ID:] \x1b[36m[${context || 'Application'} - ${isHttp ? 'HttpContext' : 'CommandContext'}]\x1b[0m ${level}: ${message}`;
                   }
                 )
               ),
@@ -32,6 +33,7 @@ export class LoggerModule {
             new transports.DailyRotateFile({
               filename: process.cwd() + `/logs/%DATE%.log`,
               format: format.combine(
+                winston.format.errors({ stack: true }),
                 winston.format.timestamp({
                   format: 'YYYY-MM-DD HH:mm:ss',
                 }),
