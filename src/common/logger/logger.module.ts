@@ -24,7 +24,7 @@ export class LoggerModule {
                 winston.format.colorize({ all: true }),
                 winston.format.printf(
                   ({ timestamp, level, message, context }) => {
-                    return `${timestamp} [Request ID:] \x1b[36m[${context || 'Application'} - ${isHttp ? 'HttpContext' : 'CommandContext'}]\x1b[0m ${level}: ${message}`;
+                    return `${timestamp} \x1b[36m[${context || 'Application'} - ${isHttp ? 'HttpContext' : 'CommandContext'}]\x1b[0m ${level}: ${message}`;
                   }
                 )
               ),
